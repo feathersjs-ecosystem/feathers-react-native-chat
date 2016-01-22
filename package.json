@@ -10,7 +10,7 @@
     "feathers": "^2.0.0-pre.4",
     "feathers-socketio": "^1.2.0",
     "react-native": "^0.18.1",
-    "react-native-gifted-messenger": "0.0.14",
+    "react-native-gifted-messenger": "0.0.15",
     "socket.io-client": "^1.4.4"
   }
 }
