@@ -1,0 +1,16 @@
+{
+  "name": "feathers-react-native-chat",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start"
+  },
+  "dependencies": {
+    "events": "^1.1.0",
+    "feathers": "^2.0.0-pre.3",
+    "feathers-socketio": "^1.2.0",
+    "react-native": "^0.18.1",
+    "react-native-gifted-messenger": "0.0.14",
+    "socket.io-client": "^1.4.4"
+  }
+}
