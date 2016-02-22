@@ -51,7 +51,7 @@ export default class Signup extends React.Component {
           <View style={baseStyles.inputContainer}>
 
             <TextInput
-              style={[baseStyles.input, baseStyles.whiteFont]}
+              style={[baseStyles.input, baseStyles.darkFont]}
               autoFocus={true}
               placeholder="Username"
               placeholderTextColor="#AAA"
@@ -63,7 +63,7 @@ export default class Signup extends React.Component {
 
             <TextInput
               password={true}
-              style={[baseStyles.input, baseStyles.whiteFont]}
+              style={[baseStyles.input, baseStyles.darkFont]}
               placeholder="Password"
               placeholderTextColor="#AAA"
               value={this.state.password}

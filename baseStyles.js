@@ -84,7 +84,7 @@ module.exports = StyleSheet.create({
   greyFont: {
     color: '#555'
   },
-  whiteFont: {
-    color: '#FFF'
+  darkFont: {
+    color: '#000'
   }
 });
