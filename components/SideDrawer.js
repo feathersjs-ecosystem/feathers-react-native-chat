@@ -1,6 +1,6 @@
 var React = require('react-native');
 
-var { Text, View } = React;
+var { Text, View, Image, StyleSheet } = React;
 
 var Drawer = require('react-native-drawer');
 var baseStyles = require('../baseStyles');
@@ -15,19 +15,27 @@ export default class SideDrawer extends React.Component {
     return (
       <View style={{marginTop: 25, marginLeft: 10, flex: 1}}>
         <View>
-          <Text style={{fontSize: 18, fontWeight: '700', padding: 5, color: 'white'}}>
-            User 1
-          </Text>
-          <Text style={{fontSize: 18, fontWeight: '700', padding: 5, color: 'white'}}>
-            User 2
-          </Text>
+          <View style={styles.userContainer}>
+            <Image source={{uri: 'http://feathersjs.com/images/logo.png'}} style={styles.avatar}/>
+            <Text style={styles.username}>
+              User 1
+            </Text>
+          </View>
+          <View style={styles.userContainer}>
+            <Image source={{uri: 'http://feathersjs.com/images/logo.png'}} style={styles.avatar}/>
+            <Text style={styles.username}>
+              User 2
+            </Text>
+          </View>
         </View>
         <View style={{flex: 1, position: 'absolute', bottom: 0, left: 0, right: 0, height: 60}}>
-          <Button style={[baseStyles.baseButton, baseStyles.primaryButton, {width: 100}]} onPress={Actions.launch}>Sign Out</Button>
+          <Button style={[baseStyles.baseButton, baseStyles.primaryButton, {width: 100}]} onPress={Actions.launch}>Sign
+            Out</Button>
         </View>
       </View>
     )
   }
+
   render() {
     return (
       <Drawer
@@ -49,6 +57,27 @@ export default class SideDrawer extends React.Component {
   }
 
   openDrawer() {
-   this.refs.drawer.toggle();
+    this.refs.drawer.toggle();
   }
 }
+var styles = StyleSheet.create({
+  userContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    marginBottom: 3,
+    alignItems: 'center'
+  },
+  avatar: {
+    width: 24,
+    height: 24,
+    backgroundColor: '#fff',
+    borderRadius: 12
+  },
+  username: {
+    fontSize: 18,
+    fontWeight: '700',
+    padding: 5,
+    color: 'white'
+  }
+
+});
