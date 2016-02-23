@@ -1,37 +1,56 @@
 var React = require('react-native');
 
-var { Text, View, Image, StyleSheet } = React;
-
+var { Text, View, Image, StyleSheet, ListView, TouchableHighlight} = React;
 var Drawer = require('react-native-drawer');
 var baseStyles = require('../baseStyles');
 var Actions = require('react-native-router-flux').Actions;
-
-
 var Button = require('react-native-button');
 
+
 export default class SideDrawer extends React.Component {
+  constructor(props) {
+    super(props);
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    var users = [
+      {id: 1, name: 'User 1', avatar: 'http://feathersjs.com/images/logo.png'},
+      {id: 2, name: 'User 2', avatar: 'http://feathersjs.com/images/logo.png'}
+    ];
+    this.state = {
+      dataSource: ds.cloneWithRows(users)
+    }
+  }
+
+  _pressRow(user, sectionID, rowID) {
+    console.log(user);
+    //TODO: Implement direct message functionality
+    //Actions.directMessage({user: user, title: user.name});
+    //this.openDrawer();
+  }
 
   renderDrawerContent() {
     return (
       <View style={{marginTop: 25, marginLeft: 10, flex: 1}}>
-        <View>
-          <View style={styles.userContainer}>
-            <Image source={{uri: 'http://feathersjs.com/images/logo.png'}} style={styles.avatar}/>
-            <Text style={styles.username}>
-              User 1
-            </Text>
-          </View>
-          <View style={styles.userContainer}>
-            <Image source={{uri: 'http://feathersjs.com/images/logo.png'}} style={styles.avatar}/>
-            <Text style={styles.username}>
-              User 2
-            </Text>
-          </View>
-        </View>
-        <View style={{flex: 1, position: 'absolute', bottom: 0, left: 0, right: 0, height: 60}}>
-          <Button style={[baseStyles.baseButton, baseStyles.primaryButton, {width: 100}]} onPress={Actions.launch}>Sign
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={(user, sectionID, rowID) => (
+
+          <TouchableHighlight onPress={() => this._pressRow(user, sectionID, rowID)}>
+            <View style={styles.userContainer}>
+              <Image source={{uri: user.avatar}} style={styles.avatar}/>
+              <Text style={styles.username}>
+                {user.name}
+              </Text>
+            </View>
+          </TouchableHighlight>
+          )}
+
+          renderFooter={() => (
+          <View style={{flex: 1, height: 60, marginTop: 100}}>
+            <Button style={[baseStyles.baseButton, baseStyles.primaryButton, {width: 120, fontSize: 16, padding: 5}]} onPress={Actions.launch}>Sign
             Out</Button>
         </View>
+          )}
+        />
       </View>
     )
   }
@@ -74,8 +93,8 @@ var styles = StyleSheet.create({
     borderRadius: 12
   },
   username: {
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 16,
+    fontWeight: '600',
     padding: 5,
     color: 'white'
   }

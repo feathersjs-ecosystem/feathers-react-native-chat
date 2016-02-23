@@ -5,6 +5,7 @@ var {Navigator, Text, View, TouchableHighlight, Platform} = React;
 var {Router, Route, Schema} = require('react-native-router-flux');
 var Actions = require('react-native-router-flux').Actions;
 var Icon = require('react-native-vector-icons/Ionicons');
+var baseStyles = require('./baseStyles');
 
 import Launch from './components/Launch';
 import Login from './components/Login';
@@ -24,8 +25,8 @@ export default class Application extends React.Component {
     return (
       <TouchableHighlight onPress={this.showsidemenu}
                           underlayColor="transparent"
-                          style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent', width: 50, height: 50}}>
-        <Icon name="navicon-round" size={30} color="#777"/>
+                          style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent', marginLeft: 0, width: 50, height: 50}}>
+        <Icon name="navicon" size={36} color={baseStyles.colors.accentColor} />
       </TouchableHighlight>
 
     );
@@ -34,6 +35,7 @@ export default class Application extends React.Component {
   showsidemenu() {
     this.refs.sidedrawer.openDrawer();
   }
+
 
   render() {
     const hideNavBar = Platform.OS === 'android';
@@ -63,15 +65,18 @@ export default class Application extends React.Component {
                wrapRouter={true} title="Launch"
                hideNavBar={true}
                schema="boot"
+               initial={true}
 
                />
 
-        <Route name='main' hideNavBar={true} type='reset' initial={true}>
+        <Route name='main' hideNavBar={true} type='reset'>
           <SideDrawer ref="sidedrawer">
             <Router
               sceneStyle={{flex: 1,backgroundColor: '#fff'}}
             >
               <Route schema='main' component={Chat} name='chat' title='Chat'
+                     renderLeftButton={this.renderLeftButton}/>
+              <Route schema='main' component={Chat} name='directMessage' title='Direct Message'
                      renderLeftButton={this.renderLeftButton}/>
             </Router>
           </SideDrawer>

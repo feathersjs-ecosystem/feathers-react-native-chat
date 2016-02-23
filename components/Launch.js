@@ -16,12 +16,14 @@ export default class Launch extends React.Component {
         marginTop: 3,
         fontSize: 44,
         color: 'black',
-        fontFamily: 'HelveticaNeue-Thin',
+        //fontFamily: 'HelveticaNeue-Thin',
         fontWeight: "200"
       },
       tagLine: {
-        fontSize: 18,
-        fontFamily: 'HelveticaNeue-Thin',
+        marginTop: 40,
+        fontSize: 20,
+        //fontFamily: 'HelveticaNeue-Thin',
+        fontWeight: "200",
         color: '#333'
       },
       bottomSection: {
@@ -55,9 +57,8 @@ export default class Launch extends React.Component {
     return (
       <View style={baseStyles.container}>
         <View style={this.styles.topSection}>
-          <Image source={{uri: 'http://feathersjs.com/images/logo.png'}} style={{width:60, height: 60}}/>
-          <Text style={this.styles.appName}>Feathers</Text>
-          <Text style={this.styles.tagLine}>Chat</Text>
+          <Image source={{uri: 'https://camo.githubusercontent.com/3bd70abb39b3a3c35252e873685ce0d4dd15aab2/687474703a2f2f66656174686572736a732e636f6d2f696d616765732f66656174686572732d6c6f676f76322e706e67'}} style={{width:295, height: 50}}/>
+          <Text style={this.styles.tagLine}>CHAT DEMO</Text>
         </View>
         <View style={this.styles.bottomSection}>
           <Button style={[baseStyles.baseButton, baseStyles.button]} onPress={Actions.login}>Login</Button>

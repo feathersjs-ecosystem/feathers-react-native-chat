@@ -28,9 +28,10 @@ module.exports = StyleSheet.create({
     marginBottom: 0,
     marginTop: 50,
     textAlign: 'center',
-    fontWeight: '300',
+    fontWeight: '200',
     fontSize: 24,
-    fontFamily: 'HelveticaNeue'
+    fontFamily: 'HelveticaNeue',
+    color: '#777'
   },
 
   baseButton: {
@@ -88,3 +89,7 @@ module.exports = StyleSheet.create({
     color: '#000'
   }
 });
+
+module.exports.colors = {
+  accentColor: '#e2717f'
+};

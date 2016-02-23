@@ -35,6 +35,8 @@ export default class Chat extends Component {
   }
 
   componentDidMount() {
+    if (this.props.user)
+      return;
     this.loadMessages();
 
     messageService.on('created', message => {
