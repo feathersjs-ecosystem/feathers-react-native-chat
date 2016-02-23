@@ -57,7 +57,7 @@ export default class Application extends React.Component {
         <Schema
           name='main'
           sceneConfig={Navigator.SceneConfigs.FadeAndroid}
-          hideNavBar={hideNavBar}
+          hideNavBar={false}
         />
 
         <Route name="launch"

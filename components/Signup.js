@@ -53,7 +53,7 @@ export default class Signup extends React.Component {
   register() {
     var self = this;
     if(!utils.validateUsername(this.state.username) || !utils.validatePassword(this.state.password)) {
-      alert('Please enter a valid username or password.');
+      utils.showAlert('Please enter a valid username or password.');
       return;
     }
 

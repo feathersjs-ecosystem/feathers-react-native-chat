@@ -31,7 +31,7 @@ export default class Login extends React.Component {
 
   login() {
     if(!utils.validateUsername(this.state.username) || !utils.validatePassword(this.state.password)) {
-      alert('Please enter a valid username or password.');
+      utils.showAlert('Please enter a valid username or password.');
       return;
     }
     let self = this;

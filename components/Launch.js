@@ -61,8 +61,8 @@ export default class Launch extends React.Component {
           <Text style={this.styles.tagLine}>CHAT DEMO</Text>
         </View>
         <View style={this.styles.bottomSection}>
-          <Button style={[baseStyles.baseButton, baseStyles.button]} onPress={Actions.login}>Login</Button>
-          <Button style={[baseStyles.baseButton, baseStyles.primaryButton]} onPress={Actions.signup}>Sign Up</Button>
+          <Button style={[baseStyles.baseButton, baseStyles.button]} containerStyle={{alignItems: 'center', justifyContent: 'center'}} onPress={Actions.login}>Login</Button>
+          <Button style={[baseStyles.baseButton, baseStyles.primaryButton]} containerStyle={{alignItems: 'center', justifyContent: 'center'}} onPress={Actions.signup}>Sign Up</Button>
         </View>
       </View>
     );
