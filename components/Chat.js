@@ -6,8 +6,10 @@ import React, {
   StyleSheet,
   Text,
   View,
-  Platform
+  Platform,
+  TouchableHighlight
 } from 'react-native';
+
 
 import GiftedMessenger from 'react-native-gifted-messenger'
 import feathers from 'feathers/client'

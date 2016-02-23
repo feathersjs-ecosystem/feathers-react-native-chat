@@ -5,6 +5,7 @@ var {View, Text, TextInput, TouchableHighlight} = React;
 var Actions = require('react-native-router-flux').Actions;
 var baseStyles = require('../baseStyles');
 var Button = require('react-native-button');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 //import Spinner from "../Spinner"
 //import Alert from "../../../alert"
@@ -43,8 +44,8 @@ export default class Login extends React.Component {
     return (
       <View style={baseStyles.container}>
         <TouchableHighlight onPress={Actions.pop} underlayColor="transparent"
-                            style={baseStyles.backButtonContainer}>
-          <Text style={baseStyles.backButtonText}>DONE</Text>
+                            style={[baseStyles.backButtonContainer, {top:10, left: 10}]}>
+          <Icon name="close-round" size={30} color="#777" />
         </TouchableHighlight>
         <Text style={baseStyles.welcomeText}>Welcome back</Text>
 

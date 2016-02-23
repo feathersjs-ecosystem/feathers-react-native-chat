@@ -1,5 +1,5 @@
 var React = require('react-native');
-var {View, Text, StyleSheet} = React;
+var {View, Text, StyleSheet, Image, Linking} = React;
 var Button = require('react-native-button');
 var Actions = require('react-native-router-flux').Actions;
 
@@ -13,7 +13,7 @@ export default class Launch extends React.Component {
     this.props = props;
     this.styles = StyleSheet.create({
       appName: {
-        marginTop: 160,
+        marginTop: 3,
         fontSize: 44,
         color: 'black',
         fontFamily: 'HelveticaNeue-Thin',
@@ -55,8 +55,9 @@ export default class Launch extends React.Component {
     return (
       <View style={baseStyles.container}>
         <View style={this.styles.topSection}>
+          <Image source={{uri: 'http://feathersjs.com/images/logo.png'}} style={{width:60, height: 60}}/>
           <Text style={this.styles.appName}>Feathers</Text>
-          <Text style={this.styles.tagLine}>Chat Example</Text>
+          <Text style={this.styles.tagLine}>Chat</Text>
         </View>
         <View style={this.styles.bottomSection}>
           <Button style={[baseStyles.baseButton, baseStyles.button]} onPress={Actions.login}>Login</Button>

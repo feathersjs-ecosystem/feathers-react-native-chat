@@ -4,6 +4,7 @@ var Actions = require('react-native-router-flux').Actions;
 var { View, Text, TextInput, TouchableHighlight } = React;
 var Button = require('react-native-button');
 var baseStyles = require('../baseStyles');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 export default class Signup extends React.Component {
 
@@ -42,10 +43,10 @@ export default class Signup extends React.Component {
     return (
       <View style={baseStyles.container}>
         <TouchableHighlight onPress={Actions.pop} underlayColor="transparent"
-                            style={baseStyles.backButtonContainer}>
-          <Text style={baseStyles.backButtonText}>DONE</Text>
+                            style={[baseStyles.backButtonContainer, {top:10, left: 10}]}>
+          <Icon name="close-round" size={30} color="#777" />
         </TouchableHighlight>
-        <Text style={baseStyles.welcomeText}>Sign up</Text>
+        <Text style={baseStyles.welcomeText}>Create an account</Text>
 
         <View style={baseStyles.inputs}>
           <View style={baseStyles.inputContainer}>

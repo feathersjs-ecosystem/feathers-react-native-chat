@@ -29,7 +29,7 @@ module.exports = StyleSheet.create({
     marginTop: 50,
     textAlign: 'center',
     fontWeight: '300',
-    fontSize: 20,
+    fontSize: 24,
     fontFamily: 'HelveticaNeue'
   },
 

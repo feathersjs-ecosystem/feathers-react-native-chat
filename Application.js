@@ -1,42 +1,42 @@
 'use strict';
 
 var React = require('react-native');
-var {Navigator, Text, View, TouchableHighlight} = React;
+var {Navigator, Text, View, TouchableHighlight, Platform} = React;
 var {Router, Route, Schema} = require('react-native-router-flux');
 var Actions = require('react-native-router-flux').Actions;
+var Icon = require('react-native-vector-icons/Ionicons');
 
 import Launch from './components/Launch';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Chat from './components/Chat';
+import SideDrawer from './components/SideDrawer';
 
 export default class Application extends React.Component {
   constructor(props) {
     console.log('constructor: Application');
     super(props);
-    this.signout = this.signout.bind(this);
-    this.renderRightButton = this.renderRightButton.bind(this);
+    this.showsidemenu = this.showsidemenu.bind(this);
+    this.renderLeftButton = this.renderLeftButton.bind(this);
   }
 
-  renderRightButton() {
+  renderLeftButton() {
     return (
-      <TouchableHighlight onPress={this.signout}
+      <TouchableHighlight onPress={this.showsidemenu}
                           underlayColor="transparent"
-                          style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginRight: 7}}>
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={{backgroundColor: 'transparent', textAlign: 'center',  alignItems: 'center', justifyContent: 'center', fontFamily:'HelveticaNeue-Thin', fontSize: 18}}>Logout</Text>
-        </View>
+                          style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent', width: 50, height: 50}}>
+        <Icon name="navicon-round" size={30} color="#777"/>
       </TouchableHighlight>
 
     );
   }
 
-  signout() {
-    console.log('sign out!!');
-    Actions.launch();
+  showsidemenu() {
+    this.refs.sidedrawer.openDrawer();
   }
 
   render() {
+    const hideNavBar = Platform.OS === 'android';
     let self = this;
     console.log('render: Application');
     return (
@@ -46,21 +46,40 @@ export default class Application extends React.Component {
         <Schema name="default" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
         <Schema name="withoutAnimation"/>
 
+        <Schema
+          name='boot'
+          sceneConfig={Navigator.SceneConfigs.FadeAndroid}
+          hideNavBar={true}
+          type='replace'
+        />
+        <Schema
+          name='main'
+          sceneConfig={Navigator.SceneConfigs.FadeAndroid}
+          hideNavBar={hideNavBar}
+        />
+
         <Route name="launch"
                component={Launch}
                wrapRouter={true} title="Launch"
                hideNavBar={true}
-               schema="withoutAnimation"
-               initial={true}
+               schema="boot"
 
                />
 
-        <Route name="login" component={Login} title="Login"/>
-        <Route name="signup" component={Signup} title="Signup" schema="default"/>
+        <Route name='main' hideNavBar={true} type='reset' initial={true}>
+          <SideDrawer ref="sidedrawer">
+            <Router
+              sceneStyle={{flex: 1,backgroundColor: '#fff'}}
+            >
+              <Route schema='main' component={Chat} name='chat' title='Chat'
+                     renderLeftButton={this.renderLeftButton}/>
+            </Router>
+          </SideDrawer>
+        </Route>
 
+        <Route name="login" component={Login} title="Login" schema="modal"/>
+        <Route name="signup" component={Signup} title="Signup" schema="modal"/>
 
-        <Route name="chat" component={Chat} title="Feathers Chat" type="replace" schema="withoutAnimation" wrapRouter={true}
-               replace={true} renderRightButton={this.renderRightButton}/>
       </Router>
     );
   }

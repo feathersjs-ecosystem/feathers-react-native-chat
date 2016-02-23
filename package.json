@@ -11,8 +11,10 @@
     "feathers-socketio": "^1.3.3",
     "react-native": "^0.20.0",
     "react-native-button": "^1.4.2",
+    "react-native-drawer": "^1.16.7",
     "react-native-gifted-messenger": "0.0.20",
     "react-native-router-flux": "^2.2.6",
+    "react-native-vector-icons": "^1.2.1",
     "socket.io-client": "^1.4.5"
   }
 }
