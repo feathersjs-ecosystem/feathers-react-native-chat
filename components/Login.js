@@ -28,7 +28,7 @@ export default class Login extends React.Component {
     let self = this;
     this.setState({loading: true});
     let loginData = {username: this.state.username.toLowerCase(), password: this.state.password};
-    Actions.chat({username: this.state.username});
+    Actions.main({username: this.state.username});
 
     //Authentication.login(loginData).then((result) => {
     //  self.setState({loading: false});

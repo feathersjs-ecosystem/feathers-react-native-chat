@@ -28,7 +28,7 @@ export default class Signup extends React.Component {
       password: this.state.password
     };
 
-    Actions.chat({username: this.state.username});
+    Actions.main({username: this.state.username});
 
     //Authentication.register(userData).then((result) => {
     //  self.setState({loading: false});
