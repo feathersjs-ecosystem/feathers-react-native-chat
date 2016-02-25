@@ -67,8 +67,6 @@ module.exports = StyleSheet.create({
   inputContainer: {
     width: 300,
     padding: 10,
-    //borderWidth: 1,
-    //borderColor: 'red',
     marginBottom: 5,
     height: 40
   },

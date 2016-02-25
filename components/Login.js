@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react-native');
-var {View, Text, TextInput, TouchableHighlight} = React;
+var {View, Text, TextInput, TouchableHighlight, Alert} = React;
 var Actions = require('react-native-router-flux').Actions;
 var baseStyles = require('../baseStyles');
 var Button = require('react-native-button');
@@ -31,7 +31,7 @@ export default class Login extends React.Component {
 
   login() {
     if(!utils.validateUsername(this.state.username) || !utils.validatePassword(this.state.password)) {
-      utils.showAlert('Please enter a valid username or password.');
+      Alert.alert('Error', 'Please enter a valid username or password.');
       return;
     }
     let self = this;
@@ -75,6 +75,21 @@ export default class Login extends React.Component {
     }
   }
 
+  renderLoginButton() {
+    if (this.state.loading) {
+      return (
+        <View style={{alignItems: 'center'}}>
+          <Text>Logging in...</Text>
+        </View>
+      );
+    }
+    return (
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <Button style={[baseStyles.baseButton, baseStyles.primaryButton]} onPress={this.login}>Login</Button>
+      </View>
+    );
+  }
+
   render() {
     return (
       <View style={baseStyles.container}>
@@ -111,18 +126,4 @@ export default class Login extends React.Component {
       </View>);
   }
 
-  renderLoginButton() {
-    if (this.state.loading) {
-      return (
-        <View style={{alignItems: 'center'}}>
-          <Text>Logging in...</Text>
-        </View>
-      );
-    }
-    return (
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <Button style={[baseStyles.baseButton, baseStyles.primaryButton]} onPress={this.login}>Login</Button>
-      </View>
-    );
-  }
 }

@@ -7,7 +7,8 @@ import React, {
   Text,
   View,
   Platform,
-  TouchableHighlight
+  TouchableHighlight,
+  Alert
 } from 'react-native';
 
 
@@ -47,6 +48,7 @@ export default class Chat extends Component {
   formatMessage(message) {
     var formattedMessage =
     {
+      id: message.id,
       name: message.name,
       text: message.body,
       position: message.name !== this.username ? 'left' : 'right',
@@ -76,6 +78,25 @@ export default class Chat extends Component {
     });
   }
 
+  longPressMessage(messageData, rowId) {
+    Alert.alert(
+      'Delete Message',
+      'Are you sure you want to delete this message?',
+      [
+        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {
+          text: 'Yes, Delete It!', onPress: () => {
+          messageService.remove(messageData.id).then(result => {
+            console.log('message deleted!');
+          }).catch((error) => {
+            console.log('ERROR deleting message');
+            console.log(error);
+          });
+        }
+        }
+      ]
+    )
+  }
   render() {
     return (
       <View style={{flex: 1, marginTop: Platform.OS === 'ios' ? 65 : 55}}>
@@ -83,6 +104,7 @@ export default class Chat extends Component {
         ref={(c) => this._GiftedMessenger = c}
         messages={this.messages}
         handleSend={this.sendMessage}
+          onMessageLongPress={this.longPressMessage}
           maxHeight={Platform.OS === 'ios' ? Dimensions.get('window').height -  65 : Dimensions.get('window').height - 85 }
 
         styles={{

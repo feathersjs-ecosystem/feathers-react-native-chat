@@ -29,9 +29,10 @@ export default class SideDrawer extends React.Component {
 
   renderDrawerContent() {
     return (
-      <View style={{marginTop: 25, marginLeft: 10, flex: 1}}>
+      <View style={{marginTop: 0, flex: 1}}>
         <ListView
           dataSource={this.state.dataSource}
+          style={{padding:10, flex: 0.9}}
           renderRow={(user, sectionID, rowID) => (
 
           <TouchableHighlight onPress={() => this._pressRow(user, sectionID, rowID)}>
@@ -43,14 +44,12 @@ export default class SideDrawer extends React.Component {
             </View>
           </TouchableHighlight>
           )}
+        />
 
-          renderFooter={() => (
-          <View style={{flex: 1, height: 60, marginTop: 100}}>
-            <Button style={[baseStyles.baseButton, baseStyles.primaryButton, {width: 120, fontSize: 16, padding: 5}]} onPress={Actions.launch}>Sign
+        <View style={{flex: 0.1, alignItems: 'center', justifyContent: 'center'}}>
+          <Button style={[baseStyles.baseButton, baseStyles.primaryButton, {width: 120, fontSize: 16, padding: 5}]} onPress={Actions.launch}>Sign
             Out</Button>
         </View>
-          )}
-        />
       </View>
     )
   }
