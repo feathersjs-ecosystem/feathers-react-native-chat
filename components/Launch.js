@@ -1,5 +1,5 @@
 var React = require('react-native');
-var {View, Text, StyleSheet, Image, Linking} = React;
+var {View, Text, StyleSheet, Image, TouchableHighlight} = React;
 var Button = require('react-native-button');
 var Actions = require('react-native-router-flux').Actions;
 
@@ -36,7 +36,7 @@ export default class Launch extends React.Component {
         left: 0,
         right: 0,
         bottom: 0,
-        height: 160
+        height: 130
       },
       topSection: {
         flexDirection: 'column',
@@ -61,8 +61,15 @@ export default class Launch extends React.Component {
           <Text style={this.styles.tagLine}>CHAT DEMO</Text>
         </View>
         <View style={this.styles.bottomSection}>
-          <Button style={[baseStyles.baseButton, baseStyles.button]} containerStyle={{alignItems: 'center', justifyContent: 'center'}} onPress={Actions.login}>Login</Button>
-          <Button style={[baseStyles.baseButton, baseStyles.primaryButton]} containerStyle={{alignItems: 'center', justifyContent: 'center'}} onPress={Actions.signup}>Sign Up</Button>
+
+          <TouchableHighlight style={baseStyles.baseButton} onPress={Actions.login} underlayColor="transparent">
+            <Text style={baseStyles.baseButtonText}>Login</Text>
+          </TouchableHighlight>
+
+          <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary]} onPress={Actions.signup} underlayColor="transparent">
+            <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>Create Account</Text>
+          </TouchableHighlight>
+
         </View>
       </View>
     );

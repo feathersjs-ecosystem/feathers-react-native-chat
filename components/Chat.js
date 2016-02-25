@@ -79,6 +79,7 @@ export default class Chat extends Component {
   }
 
   longPressMessage(messageData, rowId) {
+    //TODO: Validate that this is a message created by this user before showing alert
     Alert.alert(
       'Delete Message',
       'Are you sure you want to delete this message?',

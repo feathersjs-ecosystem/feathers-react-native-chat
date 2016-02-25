@@ -85,7 +85,9 @@ export default class Login extends React.Component {
     }
     return (
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <Button style={[baseStyles.baseButton, baseStyles.primaryButton]} onPress={this.login}>Login</Button>
+        <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary]} onPress={this.login} underlayColor="transparent">
+          <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>SIGN IN</Text>
+        </TouchableHighlight>
       </View>
     );
   }

@@ -11,6 +11,8 @@ export default class SideDrawer extends React.Component {
   constructor(props) {
     super(props);
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
+    //TODO: Load online users from service
     var users = [
       {id: 1, name: 'User 1', avatar: 'http://feathersjs.com/images/logo.png'},
       {id: 2, name: 'User 2', avatar: 'http://feathersjs.com/images/logo.png'}
@@ -47,8 +49,9 @@ export default class SideDrawer extends React.Component {
         />
 
         <View style={{flex: 0.1, alignItems: 'center', justifyContent: 'center'}}>
-          <Button style={[baseStyles.baseButton, baseStyles.primaryButton, {width: 120, fontSize: 16, padding: 5}]} onPress={Actions.launch}>Sign
-            Out</Button>
+          <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary, {width: 120, padding: 5}]} onPress={Actions.launch}>
+            <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>Sign Out</Text>
+          </TouchableHighlight>
         </View>
       </View>
     )
@@ -95,7 +98,9 @@ var styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     padding: 5,
-    color: 'white'
+    color: 'white',
+    height: 24,
+    marginLeft: 5
   }
 
 });

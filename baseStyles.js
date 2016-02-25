@@ -38,25 +38,27 @@ module.exports = StyleSheet.create({
     flex: 1,
     marginBottom: 5,
     width: 300,
-    fontSize: 18,
-    fontWeight: "600",
-    fontFamily: 'HelveticaNeue-Thin',
-    backgroundColor: '#e2717f',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 8,
-    borderWidth: 1
+    borderWidth: 2,
+    borderColor: 'white'
   },
-  button: {
-    color: '#e2717f',
-    backgroundColor: 'white',
+
+  baseButtonText: {
+    fontSize: 20,
+    fontWeight: "600",
+    fontFamily: 'HelveticaNeue-Thin'
+  },
+
+  buttonPrimary : {
+    backgroundColor: '#e2717f',
     borderColor: '#e2717f'
   },
-  primaryButton: {
-    color: 'white',
-    borderColor: '#e2717f',
-    borderWidth: 2
+  buttonPrimaryText : {
+    color: 'white'
   },
+
   inputs: {
     marginTop: 30,
     marginBottom: 10,

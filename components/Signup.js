@@ -1,7 +1,7 @@
 var React = require('react-native');
 
 var Actions = require('react-native-router-flux').Actions;
-var { View, Text, TextInput, TouchableHighlight } = React;
+var { View, Text, TextInput, TouchableHighlight, Alert } = React;
 var Button = require('react-native-button');
 var baseStyles = require('../baseStyles');
 var utils = require('../utils');
@@ -52,8 +52,9 @@ export default class Signup extends React.Component {
 
   register() {
     var self = this;
+
     if(!utils.validateUsername(this.state.username) || !utils.validatePassword(this.state.password)) {
-      utils.showAlert('Please enter a valid username or password.');
+      Alert.alert('Please enter a valid username or password.');
       return;
     }
 
@@ -122,7 +123,9 @@ export default class Signup extends React.Component {
     }
     return (
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <Button style={[baseStyles.baseButton, baseStyles.primaryButton]} onPress={this.register}>Let's Go!</Button>
+        <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary]} onPress={this.register} underlayColor="transparent">
+          <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>CREATE ACCOUNT</Text>
+        </TouchableHighlight>
       </View>
     )
   }

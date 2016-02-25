@@ -35,7 +35,6 @@ export default class Application extends React.Component {
     this.refs.sidedrawer.openDrawer();
   }
 
-
   render() {
 
     return (
@@ -49,8 +48,7 @@ export default class Application extends React.Component {
         <Schema name='main' sceneConfig={Navigator.SceneConfigs.FadeAndroid} hideNavBar={false}/>
 
         <Route name="launch" component={Launch} wrapRouter={true} title="Launch" hideNavBar={true} schema="boot"
-               initial={true}
-               />
+               initial={true} />
 
         <Route name='main' hideNavBar={true} type='reset'>
           <SideDrawer ref="sidedrawer">
