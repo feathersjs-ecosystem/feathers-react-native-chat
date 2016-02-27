@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react-native');
-var {Navigator, Text, View, TouchableHighlight, Platform} = React;
+var {Navigator, Text, View, TouchableHighlight, Platform, AsyncStorage} = React;
 var {Router, Route, Schema} = require('react-native-router-flux');
 var Icon = require('react-native-vector-icons/Ionicons');
 var baseStyles = require('./baseStyles');
@@ -11,13 +11,50 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Chat from './components/Chat';
 import SideDrawer from './components/SideDrawer';
+import feathers from 'feathers/client'
+import hooks from 'feathers-hooks';
+import socketio from 'feathers-socketio/client'
+import authentication from 'feathers-authentication/client';
+import localstorage from 'feathers-localstorage';
+
+// This is required for socket.io-client
+if (window.navigator && Object.keys(window.navigator).length == 0) {
+  window = Object.assign(window, { navigator: { userAgent: 'ReactNative' }});
+  // window.navigator = { userAgent: 'ReactNative' };
+}
+
+var io = require('socket.io-client/socket.io');
 
 export default class Application extends React.Component {
   constructor(props) {
-    console.log('constructor: Application');
     super(props);
     this.showsidemenu = this.showsidemenu.bind(this);
     this.renderLeftButton = this.renderLeftButton.bind(this);
+
+    const options = {transports: ['websocket'], forceNew: true};
+    const socket = io('http://chat.feathersjs.local:3030', options);
+
+    this.app = feathers()
+      .configure(socketio(socket))
+      .configure(hooks())
+      .use('storage', localstorage({ storage: AsyncStorage }))
+      .configure(authentication());
+
+    this.app.io.on('connect', () => {
+      console.log('connected');
+
+      // this.setState({ connected: true });
+      // TODO (EK): We should disable interacting with the app if you
+      // are not connected and instead show a banner.
+    });
+
+    this.app.io.on('disconnect', () => {
+      console.log('disconnected');
+
+      // this.setState({ connected: false });
+      // TODO (EK): We should disable interacting with the app if you
+      // are not connected and instead show a banner.
+    });
   }
 
   renderLeftButton() {
@@ -53,14 +90,14 @@ export default class Application extends React.Component {
         <Route name='main' hideNavBar={true} type='reset'>
           <SideDrawer ref="sidedrawer">
             <Router sceneStyle={{flex: 1,backgroundColor: '#fff'}}>
-              <Route schema='main' component={Chat} name='chat' title='Chat' renderLeftButton={this.renderLeftButton}/>
+              <Route schema='main' component={Chat} name='chat' title='Chat' renderLeftButton={this.renderLeftButton} app={this.app}/>
               <Route schema='main' component={Chat} name='directMessage' title='Direct Message' renderLeftButton={this.renderLeftButton}/>
             </Router>
           </SideDrawer>
         </Route>
 
-        <Route name="login" component={Login} title="Login" schema="modal"/>
-        <Route name="signup" component={Signup} title="Signup" schema="modal"/>
+        <Route name="login" component={Login} title="Login" schema="modal" app={this.app}/>
+        <Route name="signup" component={Signup} title="Signup" schema="modal" app={this.app}/>
 
       </Router>
     );

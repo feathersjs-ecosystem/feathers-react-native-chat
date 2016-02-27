@@ -15,6 +15,7 @@ export default class Login extends React.Component {
 
   constructor(props) {
     super(props);
+    this.app = this.props.app;
 
     this.login = this.login.bind(this);
     this.onChangeUsername = this.onChangeUsername.bind(this);
@@ -23,30 +24,33 @@ export default class Login extends React.Component {
     this.state = {
       usernameBorder: 'transparent',
       passwordBorder: 'transparent',
-      username: '',
-      password: '',
+      username: 'ekryski',
+      password: 'password',
       loading: false
     }
   }
 
   login() {
-    if(!utils.validateUsername(this.state.username) || !utils.validatePassword(this.state.password)) {
-      Alert.alert('Error', 'Please enter a valid username or password.');
-      return;
-    }
-    let self = this;
+    // if(!utils.validateUsername(this.state.username) || !utils.validatePassword(this.state.password)) {
+    //   Alert.alert('Error', 'Please enter a valid username or password.');
+    //   return;
+    // }
     this.setState({loading: true});
-    let loginData = {username: this.state.username.toLowerCase(), password: this.state.password};
-    Actions.main({username: this.state.username});
-
-    //Authentication.login(loginData).then((result) => {
-    //  self.setState({loading: false});
-    //  Actions.tabbar();
-    //}).catch((error) => {
-    //  self.setState({loading: false});
-    //  console.log(error);
-    //  Alert(error + "");
-    //});
+    
+    this.app.authenticate({
+      type: 'local',
+      username: this.state.username,
+      password: this.state.password
+    }).then(response => {
+      this.setState({ loading: false });
+      // re-route to chat app
+      Actions.main();
+    }).catch(error => {
+      console.log(error);
+      Alert.alert('Error', 'Please enter a valid username or password.');
+      this.setState({ loading: false });
+      return;
+    });
   }
 
   onChangeUsername(text) {
