@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react-native');
+var Actions = require('react-native-router-flux').Actions;
 var {Navigator, Text, View, TouchableHighlight, Platform, AsyncStorage} = React;
 var {Router, Route, Schema} = require('react-native-router-flux');
 var Icon = require('react-native-vector-icons/Ionicons');
@@ -39,13 +40,31 @@ export default class Application extends React.Component {
       .configure(hooks())
       .use('storage', localstorage({ storage: AsyncStorage }))
       .configure(authentication());
+  }
 
+  componentDidMount() {
     this.app.io.on('connect', () => {
       console.log('connected');
-
-      // this.setState({ connected: true });
+      this.setState({ connected: true });
       // TODO (EK): We should disable interacting with the app if you
       // are not connected and instead show a banner.
+
+      // Try to authenticate if there is a stored token
+      this.app.service('storage').get('token').then(token => {
+        if (token) {
+          this.setState({ loading: true });
+          
+          this.app.authenticate({
+            type: 'token',
+            token: token.value
+          }).then(response => {
+            this.setState({ loading: false });
+            Actions.main();
+          }).catch(error => {
+            Actions.login();
+          });
+        }
+      });
     });
 
     this.app.io.on('disconnect', () => {
@@ -88,7 +107,7 @@ export default class Application extends React.Component {
                initial={true} />
 
         <Route name='main' hideNavBar={true} type='reset'>
-          <SideDrawer ref="sidedrawer">
+          <SideDrawer ref="sidedrawer" app={this.app}>
             <Router sceneStyle={{flex: 1,backgroundColor: '#fff'}}>
               <Route schema='main' component={Chat} name='chat' title='Chat' renderLeftButton={this.renderLeftButton} app={this.app}/>
               <Route schema='main' component={Chat} name='directMessage' title='Direct Message' renderLeftButton={this.renderLeftButton}/>
