@@ -56,7 +56,7 @@ export default class SideDrawer extends React.Component {
       </View>
     )
   }
-
+// shadowColor: "#000000", shadowOpacity: 0.4, shadowRadius: 3
   render() {
     return (
       <Drawer
@@ -67,7 +67,7 @@ export default class SideDrawer extends React.Component {
         openDrawerOffset={0.6}
         panCloseMask={0.8}
         closedDrawerOffset={-3}
-        styles={{main: {shadowColor: "#000000", shadowOpacity: 0.4, shadowRadius: 3}, drawer : {backgroundColor: '#333'}}}
+        styles={{main: {}, drawer : {backgroundColor: '#333'}}}
         tweenHandler={Drawer.tweenPresets.parallax}
       >
         {React.Children.map(this.props.children, c => React.cloneElement(c, {

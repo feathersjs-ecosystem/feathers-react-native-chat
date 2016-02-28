@@ -11,6 +11,8 @@ export default class Signup extends React.Component {
 
   constructor(props) {
     super(props);
+    this.app = this.props.app;
+
     this.register = this.register.bind(this);
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
@@ -65,15 +67,27 @@ export default class Signup extends React.Component {
       password: this.state.password
     };
 
-    Actions.main({username: this.state.username});
+    this.app.service('users').create(userData).then((result) => {
 
-    //Authentication.register(userData).then((result) => {
-    //  self.setState({loading: false});
-    //  Actions.tabbar();
-    //}).catch((err) => {
-    //  self.setState({loading: false});
-    //  Alert(err.message);
-    //});
+      this.app.authenticate({
+        type: 'local',
+        username: this.state.username,
+        password: this.state.password
+      }).then(response => {
+        this.setState({ loading: false });
+        // re-route to main authorized chat   component
+        Actions.main();
+      }).catch(error => {
+        console.log(error);
+        Alert.alert('Error', 'Please enter a valid username or password.');
+        this.setState({ loading: false });
+      });
+    }).catch((err) => {
+      console.log('err');
+      console.log(err);
+      self.setState({loading: false});
+      Alert.alert('Error', err.message);
+    });
   }
 
   render() {
