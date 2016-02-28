@@ -4,7 +4,6 @@ var React = require('react-native');
 var {View, Text, TextInput, TouchableHighlight, Alert} = React;
 var Actions = require('react-native-router-flux').Actions;
 var baseStyles = require('../baseStyles');
-var Button = require('react-native-button');
 var Icon = require('react-native-vector-icons/Ionicons');
 var utils = require('../utils');
 
@@ -113,6 +112,8 @@ export default class Login extends React.Component {
               autoFocus={true}
               placeholder="Username"
               placeholderTextColor="#AAA"
+              autoCorrect={false}
+              autoCapitalize='none'
               value={this.state.username}
               onChangeText={this.onChangeUsername}
             />
@@ -123,6 +124,8 @@ export default class Login extends React.Component {
               style={[baseStyles.input, baseStyles.greyFont, {borderWidth: 1, borderColor: this.state.passwordBorder}]}
               placeholder="Password"
               placeholderTextColor="#AAA"
+              autoCorrect={false}
+              autoCapitalize='none'
               value={this.state.password}
               onChangeText={this.onChangePassword}
             />

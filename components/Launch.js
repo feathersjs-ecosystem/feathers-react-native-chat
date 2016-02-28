@@ -1,6 +1,6 @@
 var React = require('react-native');
 var {View, Text, StyleSheet, Image, TouchableHighlight} = React;
-var Button = require('react-native-button');
+
 var Actions = require('react-native-router-flux').Actions;
 
 var baseStyles = require('../baseStyles');
@@ -61,12 +61,11 @@ export default class Launch extends React.Component {
           <Text style={this.styles.tagLine}>CHAT DEMO</Text>
         </View>
         <View style={this.styles.bottomSection}>
-
-          <TouchableHighlight style={baseStyles.baseButton} onPress={Actions.login} underlayColor="transparent">
-            <Text style={baseStyles.baseButtonText}>Login</Text>
+          <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonDefault]} onPress={Actions.login} underlayColor="#ddd">
+            <Text style={[baseStyles.baseButtonText, baseStyles.buttonDefaultText]}>Login</Text>
           </TouchableHighlight>
 
-          <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary]} onPress={Actions.signup} underlayColor="transparent">
+          <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary]} onPress={Actions.signup} underlayColor="#e2717f">
             <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>Create Account</Text>
           </TouchableHighlight>
 

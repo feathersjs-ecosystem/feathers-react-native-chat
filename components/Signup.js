@@ -2,7 +2,7 @@ var React = require('react-native');
 
 var Actions = require('react-native-router-flux').Actions;
 var { View, Text, TextInput, TouchableHighlight, Alert } = React;
-var Button = require('react-native-button');
+
 var baseStyles = require('../baseStyles');
 var utils = require('../utils');
 var Icon = require('react-native-vector-icons/Ionicons');
@@ -93,6 +93,8 @@ export default class Signup extends React.Component {
               autoFocus={true}
               placeholder="Username"
               placeholderTextColor="#AAA"
+              autoCorrect={false}
+              autoCapitalize='none'
               value={this.state.username}
               onChangeText={this.onChangeUsername}
             />
@@ -104,6 +106,8 @@ export default class Signup extends React.Component {
               style={[baseStyles.input, baseStyles.darkFont, {borderWidth: 1, borderColor: this.state.passwordBorder}]}
               placeholder="Password"
               placeholderTextColor="#AAA"
+              autoCorrect={false}
+              autoCapitalize='none'
               value={this.state.password}
               onChangeText={this.onChangePassword}
             />
@@ -122,9 +126,9 @@ export default class Signup extends React.Component {
       );
     }
     return (
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{justifyContent: 'center', alignItems: 'center', height: 50, flexDirection: 'column'}}>
         <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary]} onPress={this.register} underlayColor="transparent">
-          <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>CREATE ACCOUNT</Text>
+          <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>Create Account</Text>
         </TouchableHighlight>
       </View>
     )

@@ -1,5 +1,6 @@
 var React = require('react-native');
-var {StyleSheet} = React;
+var {StyleSheet, Dimensions} = React;
+
 
 module.exports = StyleSheet.create({
   container: {
@@ -35,20 +36,29 @@ module.exports = StyleSheet.create({
   },
 
   baseButton: {
-    flex: 1,
+    flex: 0.8,
+    flexDirection: 'column',
     marginBottom: 5,
-    width: 300,
+    width: Dimensions.get('window').width - 30,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 8,
-    borderWidth: 2,
-    borderColor: 'white'
+    //borderWidth: 2,
+    //borderColor: 'white'
   },
 
   baseButtonText: {
     fontSize: 20,
     fontWeight: "600",
     fontFamily: 'HelveticaNeue-Thin'
+  },
+
+  buttonDefault : {
+    backgroundColor: '#BBB',
+    borderColor: '#BBB'
+  },
+  buttonDefaultText : {
+    color: 'white'
   },
 
   buttonPrimary : {
