@@ -21,27 +21,45 @@ export default class Chat extends Component {
     super(props);
     this.app = this.props.app;
 
+    console.log('constructor chat props', props);
     this.state = {
       online: true
     };
     this.messages = [];
 
     this.formatMessage = this.formatMessage.bind(this);
+    this.loadMessages = this.loadMessages.bind(this);
   }
 
+  //componentWillUpdate(nextProps, nextState) {
+  //  console.log('componentWillUpdate');
+  //  console.log(nextProps);
+  //  console.log(nextState);
+  //}
+  //
+  //componentWillReceiveProps (nextProps) {
+  //  console.log('componentWillReceiveProps', nextProps);
+  //  //this.setState({
+  //  //  likesIncreasing: nextProps.likeCount > this.props.likeCount
+  //  //});
+  //}
 
   componentDidMount(props) {
     console.log('componentDidMount chat props', props);
     var self = this;
 
-    if(this.props.events) {
+    if (this.props.events) {
       this.props.events.addListener('socket:disconnect', () => {
+        console.log('socket:disconnect!');
         self.setState({online: false});
       });
 
       this.props.events.addListener('socket:connect', () => {
         console.log('socket:connect!');
+        var prevState = this.state.online;
         self.setState({online: true});
+        if(!prevState)
+          this.loadMessages();
       });
     }
 
@@ -56,7 +74,7 @@ export default class Chat extends Component {
   }
 
   formatMessage(message) {
-    console.log('Message', message);
+    //console.log('Message', message);
     return {
       id: message._id,
       name: message.sentBy.username,
@@ -68,6 +86,8 @@ export default class Chat extends Component {
   }
 
   loadMessages() {
+    if (!this.state.online)
+      return;
     this.app.service('messages').find({}).then(response => {
       this.messages = [];
       for (var message of response.data) {
@@ -80,7 +100,7 @@ export default class Chat extends Component {
   }
 
   sendMessage(message = {}, rowID = null) {
-    console.log(message);
+
     this.app.service('messages').create({text: message.text}).then(result => {
       console.log('message created!');
     }).catch((error) => {
@@ -90,6 +110,8 @@ export default class Chat extends Component {
   }
 
   longPressMessage(messageData, rowId) {
+    console.log(messageData);
+    console.log(rowId);
     //TODO: Validate that this is a message created by this user before showing alert
     Alert.alert(
       'Delete Message',
@@ -110,18 +132,19 @@ export default class Chat extends Component {
       ]
     )
   }
-  render() {
-      console.log('render chat', this.props);
-      if(this.state.online) {
-        return (<View style={{flex: 1, marginTop: Platform.OS === 'ios' ? 65 : 55}}>
-          <GiftedMessenger
-            ref={(c) => this._GiftedMessenger = c}
-            messages={this.messages}
-            handleSend={this.sendMessage.bind(this)}
-            onMessageLongPress={this.longPressMessage.bind(this)}
-            maxHeight={Platform.OS === 'ios' ? Dimensions.get('window').height -  65 : Dimensions.get('window').height - 85 }
 
-            styles={{
+  render() {
+    console.log('render chat', this.props);
+    if (this.state.online) {
+      return (<View style={{flex: 1, marginTop: Platform.OS === 'ios' ? 65 : 55}}>
+        <GiftedMessenger
+          ref={(c) => this._GiftedMessenger = c}
+          messages={this.messages}
+          handleSend={this.sendMessage.bind(this)}
+          onMessageLongPress={this.longPressMessage.bind(this)}
+          maxHeight={Platform.OS === 'ios' ? Dimensions.get('window').height -  65 : Dimensions.get('window').height - 85 }
+
+          styles={{
           bubbleLeft: {
             backgroundColor: '#e6e6eb',
             marginRight: 70
@@ -131,14 +154,14 @@ export default class Chat extends Component {
             marginLeft: 70
           }
         }}
-          />
-        </View>)
-      } else {
-        return (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Icon name="warning" size={60} color={baseStyles.colors.accentColor} />
-          <Text>Offline</Text>
-        </View>);
-      }
+        />
+      </View>)
+    } else {
+      return (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Icon name="warning" size={60} color={baseStyles.colors.accentColor}/>
+        <Text>Offline</Text>
+      </View>);
+    }
 
   }
 }

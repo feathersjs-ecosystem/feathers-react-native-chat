@@ -23,8 +23,8 @@ export default class Login extends React.Component {
     this.state = {
       usernameBorder: 'transparent',
       passwordBorder: 'transparent',
-      username: 'ekryski',
-      password: 'password',
+      username: '',
+      password: '',
       loading: false
     }
   }
