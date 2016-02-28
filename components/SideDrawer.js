@@ -20,6 +20,9 @@ export default class SideDrawer extends React.Component {
     this.state = {
       dataSource: ds.cloneWithRows(users)
     }
+
+    this.app = props.app;
+    this._signOut = this._signOut.bind(this);
   }
 
   _pressRow(user, sectionID, rowID) {
@@ -27,6 +30,10 @@ export default class SideDrawer extends React.Component {
     //TODO: Implement direct message functionality
     //Actions.directMessage({user: user, title: user.name});
     //this.openDrawer();
+  }
+
+  _signOut() {
+    this.app.logout().then(() => Actions.launch());
   }
 
   renderDrawerContent() {
@@ -49,7 +56,7 @@ export default class SideDrawer extends React.Component {
         />
 
         <View style={{flex: 0.1, alignItems: 'center', justifyContent: 'center'}}>
-          <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary, {width: 120, padding: 5}]} onPress={Actions.launch}>
+          <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary, {width: 120, padding: 5}]} onPress={this._signOut}>
             <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>Sign Out</Text>
           </TouchableHighlight>
         </View>

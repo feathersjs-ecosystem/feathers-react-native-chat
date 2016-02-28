@@ -68,7 +68,6 @@ export default class Signup extends React.Component {
     };
 
     this.app.service('users').create(userData).then((result) => {
-
       this.app.authenticate({
         type: 'local',
         username: this.state.username,
