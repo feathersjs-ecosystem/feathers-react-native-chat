@@ -73,6 +73,11 @@ export default class Chat extends Component {
     });
   }
 
+  componentWillUnmount() {
+    this.props.events.removeAllListeners('socket:connect');
+    this.props.events.removeAllListeners('socket:disconnect');
+  }
+
   formatMessage(message) {
     //console.log('Message', message);
     return {
