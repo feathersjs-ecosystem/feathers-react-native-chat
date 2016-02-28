@@ -6,11 +6,14 @@ var {Router, Route, Schema} = require('react-native-router-flux');
 var Icon = require('react-native-vector-icons/Ionicons');
 var baseStyles = require('./baseStyles');
 
+var EventEmitter = require('EventEmitter');
+
 import Launch from './components/Launch';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Chat from './components/Chat';
 import SideDrawer from './components/SideDrawer';
+
 import feathers from 'feathers/client'
 import hooks from 'feathers-hooks';
 import socketio from 'feathers-socketio/client'
@@ -19,7 +22,7 @@ import localstorage from 'feathers-localstorage';
 
 // This is required for socket.io-client
 if (window.navigator && Object.keys(window.navigator).length == 0) {
-  window = Object.assign(window, { navigator: { userAgent: 'ReactNative' }});
+  window = Object.assign(window, {navigator: {userAgent: 'ReactNative'}});
   // window.navigator = { userAgent: 'ReactNative' };
 }
 
@@ -31,29 +34,25 @@ export default class Application extends React.Component {
     this.showsidemenu = this.showsidemenu.bind(this);
     this.renderLeftButton = this.renderLeftButton.bind(this);
 
+    this.eventEmitter = new EventEmitter();
     const options = {transports: ['websocket'], forceNew: true};
     const socket = io('http://chat.feathersjs.local:3030', options);
 
     this.app = feathers()
       .configure(socketio(socket))
       .configure(hooks())
-      .use('storage', localstorage({ storage: AsyncStorage }))
+      .use('storage', localstorage({storage: AsyncStorage}))
       .configure(authentication());
+  }
+
+  componentDidMount() {
 
     this.app.io.on('connect', () => {
-      console.log('connected');
-
-      // this.setState({ connected: true });
-      // TODO (EK): We should disable interacting with the app if you
-      // are not connected and instead show a banner.
+      this.eventEmitter.emit('socket:connect');
     });
 
     this.app.io.on('disconnect', () => {
-      console.log('disconnected');
-
-      // this.setState({ connected: false });
-      // TODO (EK): We should disable interacting with the app if you
-      // are not connected and instead show a banner.
+      this.eventEmitter.emit('socket:disconnect');
     });
   }
 
@@ -62,7 +61,7 @@ export default class Application extends React.Component {
       <TouchableHighlight onPress={this.showsidemenu}
                           underlayColor="transparent"
                           style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent', marginLeft: 0, width: 50, height: 50}}>
-        <Icon name="navicon" size={36} color={baseStyles.colors.accentColor} />
+        <Icon name="ios-people" size={36} color={baseStyles.colors.accentColor}/>
       </TouchableHighlight>
 
     );
@@ -82,16 +81,18 @@ export default class Application extends React.Component {
         <Schema name="withoutAnimation"/>
 
         <Schema name='boot' sceneConfig={Navigator.SceneConfigs.FadeAndroid} hideNavBar={true} type='replace'/>
-        <Schema name='main' sceneConfig={Navigator.SceneConfigs.FadeAndroid} hideNavBar={false}/>
+        <Schema name='main' sceneConfig={Navigator.SceneConfigs.FadeAndroid} hideNavBar={false}  />
 
         <Route name="launch" component={Launch} wrapRouter={true} title="Launch" hideNavBar={true} schema="boot"
-               initial={true} />
+               initial={true}/>
 
         <Route name='main' hideNavBar={true} type='reset'>
-          <SideDrawer ref="sidedrawer">
-            <Router sceneStyle={{flex: 1,backgroundColor: '#fff'}}>
-              <Route schema='main' component={Chat} name='chat' title='Chat' renderLeftButton={this.renderLeftButton} app={this.app}/>
-              <Route schema='main' component={Chat} name='directMessage' title='Direct Message' renderLeftButton={this.renderLeftButton}/>
+          <SideDrawer ref="sidedrawer" app={this.app}>
+            <Router sceneStyle={{flex: 1, backgroundColor: '#fff' }}>
+              <Route schema='main' component={Chat} name='chat' title='Chat' renderLeftButton={this.renderLeftButton}
+                     app={this.app} events={this.eventEmitter}/>
+              <Route schema='main' component={Chat} name='directMessage' title='Direct Message'
+                     renderLeftButton={this.renderLeftButton}/>
             </Router>
           </SideDrawer>
         </Route>

@@ -11,6 +11,8 @@ import React, {
   Alert
 } from 'react-native';
 
+var Icon = require('react-native-vector-icons/FontAwesome');
+var baseStyles = require('../baseStyles');
 
 import GiftedMessenger from 'react-native-gifted-messenger'
 
@@ -18,12 +20,31 @@ export default class Chat extends Component {
   constructor(props) {
     super(props);
     this.app = this.props.app;
+
+    this.state = {
+      online: true
+    };
     this.messages = [];
 
     this.formatMessage = this.formatMessage.bind(this);
   }
 
-  componentDidMount() {
+
+  componentDidMount(props) {
+    console.log('componentDidMount chat props', props);
+    var self = this;
+
+    if(this.props.events) {
+      this.props.events.addListener('socket:disconnect', () => {
+        self.setState({online: false});
+      });
+
+      this.props.events.addListener('socket:connect', () => {
+        console.log('socket:connect!');
+        self.setState({online: true});
+      });
+    }
+
     this.app.user().then(user => {
       this.user = user;
       this.loadMessages();
@@ -41,7 +62,7 @@ export default class Chat extends Component {
       name: message.sentBy.username,
       text: message.text,
       position: message.sentBy.username !== this.user.username ? 'left' : 'right',
-      image: {uri: message.sentBy.photoURL},//message.name !== this.username ? {uri: 'https://facebook.github.io/react/img/logo_og.png'} : {uri: 'http://feathersjs.com/images/logo.png' },
+      image: {uri: message.sentBy.photoURL},
       date: new Date(message.createdAt)
     };
   }
@@ -90,28 +111,35 @@ export default class Chat extends Component {
     )
   }
   render() {
-    return (
-      <View style={{flex: 1, marginTop: Platform.OS === 'ios' ? 65 : 55}}>
-      <GiftedMessenger
-        ref={(c) => this._GiftedMessenger = c}
-        messages={this.messages}
-        handleSend={this.sendMessage.bind(this)}
-          onMessageLongPress={this.longPressMessage.bind(this)}
-          maxHeight={Platform.OS === 'ios' ? Dimensions.get('window').height -  65 : Dimensions.get('window').height - 85 }
+      console.log('render chat', this.props);
+      if(this.state.online) {
+        return (<View style={{flex: 1, marginTop: Platform.OS === 'ios' ? 65 : 55}}>
+          <GiftedMessenger
+            ref={(c) => this._GiftedMessenger = c}
+            messages={this.messages}
+            handleSend={this.sendMessage.bind(this)}
+            onMessageLongPress={this.longPressMessage.bind(this)}
+            maxHeight={Platform.OS === 'ios' ? Dimensions.get('window').height -  65 : Dimensions.get('window').height - 85 }
 
-        styles={{
+            styles={{
           bubbleLeft: {
             backgroundColor: '#e6e6eb',
-            marginRight: 70,
+            marginRight: 70
           },
           bubbleRight: {
             backgroundColor: '#e2717f',
-            marginLeft: 70,
+            marginLeft: 70
           }
         }}
-      />
-      </View>
-    );
+          />
+        </View>)
+      } else {
+        return (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Icon name="warning" size={60} color={baseStyles.colors.accentColor} />
+          <Text>Offline</Text>
+        </View>);
+      }
+
   }
 }
 
