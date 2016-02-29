@@ -39,6 +39,7 @@ export default class Application extends React.Component {
     const options = {transports: ['websocket'], forceNew: true};
     const socket = io('http://chat.feathersjs.local:3030', options);
 
+    this.state = {connected: false};
     this.app = feathers()
       .configure(socketio(socket))
       .configure(hooks())
@@ -47,10 +48,10 @@ export default class Application extends React.Component {
   }
 
   componentDidMount() {
-      this.eventEmitter.emit('socket:connect');
+
 
     this.app.io.on('connect', () => {
-
+      this.eventEmitter.emit('socket:connect');
       this.setState({ connected: true });
       // TODO (EK): We should disable interacting with the app if you
       // are not connected and instead show a banner.
@@ -74,11 +75,13 @@ export default class Application extends React.Component {
     });
 
     this.app.io.on('disconnect', () => {
+      this.setState({ connected: false });
       this.eventEmitter.emit('socket:disconnect');
     });
   }
 
   renderLeftButton() {
+    if(this.state.connected) {
     return (
       <TouchableHighlight onPress={this.showsidemenu}
                           underlayColor="transparent"
@@ -87,6 +90,9 @@ export default class Application extends React.Component {
       </TouchableHighlight>
 
     );
+    } else {
+      return (<View />);
+    }
   }
 
   showsidemenu() {
