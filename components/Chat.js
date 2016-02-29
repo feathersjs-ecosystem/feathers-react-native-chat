@@ -81,13 +81,22 @@ export default class Chat extends Component {
     this.props.events.removeAllListeners('socket:disconnect');
   }
 
+
   formatMessage(message) {
     //console.log('Message', message);
+
+    var isCurrentUser = false;
+    if(typeof message.sentBy !== 'string') {
+      isCurrentUser = message.sentBy._id === this.user._id;
+    } else {
+      isCurrentUser = message.sentBy === this.user._id;
+    }
+
     return {
       id: message._id,
       name: message.sentBy.username,
       text: message.text,
-      position: message.sentBy.username !== this.user.username ? 'left' : 'right',
+      position: isCurrentUser ? 'left' : 'right',
       image: {uri: message.sentBy.photoURL},
       date: new Date(message.createdAt)
     };
@@ -137,6 +146,11 @@ export default class Chat extends Component {
           this.app.service('messages').remove(messageData.id).then(result => {
             // TODO(EK): Remove message from this.messages
             console.log('message deleted!');
+            var messages = this.state.messages;
+            messages = messages.filter(function (i) {
+              return i.id != messageData.id;
+            });
+            this.setState({messages: messages});
           }).catch((error) => {
             console.log('ERROR deleting message');
             console.log(error);
@@ -150,8 +164,8 @@ export default class Chat extends Component {
   render() {
     if (!this.state.online) {
       return (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Icon name="warning" size={60} color={baseStyles.colors.accentColor}/>
-        <Text>Offline</Text>
+        <Icon name="warning" size={80} color={baseStyles.colors.accentColor}/>
+        <Text style={{marginTop: 30, fontWeight: '200', fontSize: 20}}>Please check your connection</Text>
       </View>);
     }
     
@@ -164,7 +178,6 @@ export default class Chat extends Component {
         onMessageLongPress={this.longPressMessage.bind(this)}
         onLoadEarlierMessages={this.loadMessages.bind(this)}
         maxHeight={Platform.OS === 'ios' ? Dimensions.get('window').height -  65 : Dimensions.get('window').height - 85 }
-
           styles={{
           bubbleLeft: {
             backgroundColor: '#e6e6eb',
