@@ -22,7 +22,7 @@ export default class Chat extends Component {
     this.app = this.props.app;
 
     this.state = {
-      online: true
+      online: true,
       messages: [],
       skip: 0
     }
