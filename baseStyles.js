@@ -81,7 +81,9 @@ module.exports = StyleSheet.create({
     width: Dimensions.get('window').width - 30,
     padding: 10,
     marginBottom: 5,
-    height: 40
+    height: 40,
+    borderBottomWidth: Platform.OS === 'ios' ? 1 : 0,
+    borderColor: Platform.OS === 'ios' ? '#999' : 'transparent'
   },
   input: {
     position: 'absolute',
@@ -90,7 +92,8 @@ module.exports = StyleSheet.create({
     right: 5,
     bottom: 0,
     height: 40,
-    fontSize: 18
+    fontSize: 18,
+    padding: 5
   },
 
   greyFont: {

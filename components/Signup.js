@@ -100,7 +100,7 @@ export default class Signup extends React.Component {
                             style={[baseStyles.backButtonContainer]}>
           <Icon name="close-round" size={30} color="#999" />
         </TouchableHighlight>
-        <Text style={baseStyles.welcomeText}>CREATE ACCOUNT</Text>
+        <Text style={baseStyles.welcomeText}>Create Account</Text>
 
         <View style={baseStyles.inputs}>
           <View style={baseStyles.inputContainer}>

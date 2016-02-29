@@ -199,6 +199,9 @@ export default class Chat extends Component {
           bubbleRight: {
             backgroundColor: '#e2717f',
             marginLeft: 70
+          },
+          listView: {
+            paddingTop: 5
           }
         }}
         />
