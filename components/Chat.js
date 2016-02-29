@@ -74,6 +74,16 @@ export default class Chat extends Component {
 
       this.setState({ messages });
     });
+
+    this.app.service('messages').on('deleted', message => {
+      const messages = this.state.messages;
+
+      messages = messages.filter(function (item) {
+        return item.id != messageData.id;
+      });
+
+      this.setState({ messages });
+    });
   }
 
   componentWillUnmount() {
@@ -133,8 +143,6 @@ export default class Chat extends Component {
   }
 
   longPressMessage(messageData, rowId) {
-    console.log(messageData);
-    console.log(rowId);
     //TODO: Validate that this is a message created by this user before showing alert
     Alert.alert(
       'Delete Message',
@@ -144,15 +152,14 @@ export default class Chat extends Component {
         {
           text: 'Yes, Delete It!', onPress: () => {
           this.app.service('messages').remove(messageData.id).then(result => {
-            // TODO(EK): Remove message from this.messages
-            console.log('message deleted!');
-            var messages = this.state.messages;
-            messages = messages.filter(function (i) {
-              return i.id != messageData.id;
+            const messages = this.state.messages;
+
+            messages = messages.filter(function (message) {
+              return message.id != messageData.id;
             });
-            this.setState({messages: messages});
+
+            this.setState({ messages });
           }).catch((error) => {
-            console.log('ERROR deleting message');
             console.log(error);
           });
         }
