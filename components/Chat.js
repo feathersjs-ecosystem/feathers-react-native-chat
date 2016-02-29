@@ -21,11 +21,11 @@ export default class Chat extends Component {
     super(props);
     this.app = this.props.app;
 
-    console.log('constructor chat props', props);
     this.state = {
       online: true
-    };
-    this.messages = [];
+      messages: [],
+      skip: 0
+    }
 
     this.formatMessage = this.formatMessage.bind(this);
     this.loadMessages = this.loadMessages.bind(this);
@@ -69,7 +69,10 @@ export default class Chat extends Component {
     });
 
     this.app.service('messages').on('created', message => {
-      this._GiftedMessenger.appendMessage(this.formatMessage(message));
+      const messages = this.state.messages;
+      messages.push(this.formatMessage(message));
+
+      this.setState({ messages });
     });
   }
 
@@ -91,21 +94,27 @@ export default class Chat extends Component {
   }
 
   loadMessages() {
-    if (!this.state.online)
+    if (!this.state.online) {
       return;
-    this.app.service('messages').find({}).then(response => {
-      this.messages = [];
+    }
+
+    const query = { query: { $sort: { updatedAt: -1 }, $skip: this.state.skip }};
+
+    this.app.service('messages').find(query).then(response => {
+      const messages = [];
+      const skip = response.skip;
+
       for (var message of response.data) {
-        this.messages.push(this.formatMessage(message));
+        messages.unshift(this.formatMessage(message));
       }
-      this._GiftedMessenger.appendMessages(this.messages);
+
+      this.setState({ messages, skip });
     }).catch(error => {
       console.log(error);
     });
   }
 
   sendMessage(message = {}, rowID = null) {
-
     this.app.service('messages').create({text: message.text}).then(result => {
       console.log('message created!');
     }).catch((error) => {
@@ -139,15 +148,22 @@ export default class Chat extends Component {
   }
 
   render() {
-    console.log('render chat', this.props);
-    if (this.state.online) {
-      return (<View style={{flex: 1, marginTop: Platform.OS === 'ios' ? 65 : 55}}>
-        <GiftedMessenger
-          ref={(c) => this._GiftedMessenger = c}
-          messages={this.messages}
-          handleSend={this.sendMessage.bind(this)}
-          onMessageLongPress={this.longPressMessage.bind(this)}
-          maxHeight={Platform.OS === 'ios' ? Dimensions.get('window').height -  65 : Dimensions.get('window').height - 85 }
+    if (!this.state.online) {
+      return (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Icon name="warning" size={60} color={baseStyles.colors.accentColor}/>
+        <Text>Offline</Text>
+      </View>);
+    }
+    
+    return (
+      <View style={{flex: 1, marginTop: Platform.OS === 'ios' ? 65 : 55}}>
+      <GiftedMessenger
+        ref={(c) => this._GiftedMessenger = c}
+        messages={this.state.messages}
+        handleSend={this.sendMessage.bind(this)}
+        onMessageLongPress={this.longPressMessage.bind(this)}
+        onLoadEarlierMessages={this.loadMessages.bind(this)}
+        maxHeight={Platform.OS === 'ios' ? Dimensions.get('window').height -  65 : Dimensions.get('window').height - 85 }
 
           styles={{
           bubbleLeft: {
@@ -160,14 +176,7 @@ export default class Chat extends Component {
           }
         }}
         />
-      </View>)
-    } else {
-      return (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Icon name="warning" size={60} color={baseStyles.colors.accentColor}/>
-        <Text>Offline</Text>
       </View>);
-    }
-
   }
 }
 
