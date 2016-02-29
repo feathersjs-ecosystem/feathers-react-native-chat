@@ -25,10 +25,12 @@ export default class SideDrawer extends React.Component {
   componentDidMount() {
     this.app.user().then(user => {
       // Find all online users that are not me
+      // TODO (EK): Maybe set a higher max limit
       const query = {
         query: {
           online: true,
-          _id: { $nin: [user._id] }
+          _id: { $nin: [user._id] },
+          $limit: 25
         }
       };
 
