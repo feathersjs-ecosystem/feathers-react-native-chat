@@ -30,7 +30,7 @@ export default class Chat extends Component {
 
     this.formatMessage = this.formatMessage.bind(this);
     this.loadMessages = this.loadMessages.bind(this);
-    this.loadEarlierMessages = this.loadEarlierMessages.bind(this);
+
   }
 
   componentDidMount(props) {
@@ -106,7 +106,7 @@ export default class Chat extends Component {
     this.setState({messages});
   }
 
-  loadMessages() {
+  loadMessages(oldestMessage, callback) {
     if (!this.state.online) {
       return;
     }
@@ -120,24 +120,13 @@ export default class Chat extends Component {
         messages.unshift(this.formatMessage(message));
       }
 
-      this.setState({messages, skip, hasMoreMessages: response.skip + response.limit < response.total});
-    }).catch(error => {
-      console.log(error);
-    });
-  }
-
-  loadEarlierMessages(oldestMessage, callback) {
-    const query = {query: {$sort: {updatedAt: -1}, $skip: this.state.skip}};
-    this.app.service('messages').find(query).then(response => {
-      const messages = [];
-      const skip = response.skip + response.limit;
-
-      for (var message of response.data) {
-        messages.unshift(this.formatMessage(message));
-      }
+      // This was fired from the load earlier messages button
+      if(callback) {
       this.setState({skip, hasMoreMessages: response.skip + response.limit < response.total});
       callback(messages, false);
-
+      } else {
+        this.setState({messages, skip, hasMoreMessages: response.skip + response.limit < response.total});
+      }
     }).catch(error => {
       console.log(error);
     });
@@ -188,7 +177,7 @@ export default class Chat extends Component {
           messages={this.state.messages}
           handleSend={this.sendMessage.bind(this)}
           onMessageLongPress={this.promptToDeleteMessage.bind(this)}
-          onLoadEarlierMessages={this.loadEarlierMessages}
+          onLoadEarlierMessages={this.loadMessages}
           loadEarlierMessagesButton={this.state.hasMoreMessages}
           maxHeight={Platform.OS === 'ios' ? Dimensions.get('window').height -  65 : Dimensions.get('window').height - 85 }
           styles={{

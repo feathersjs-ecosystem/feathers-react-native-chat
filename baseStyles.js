@@ -42,9 +42,7 @@ module.exports = StyleSheet.create({
     width: Dimensions.get('window').width - 30,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 8,
-    //borderWidth: 2,
-    //borderColor: 'white'
+    padding: 8
   },
 
   baseButtonText: {
