@@ -65,14 +65,8 @@ export default class Chat extends Component {
       this.setState({messages});
     });
 
-    this.app.service('messages').on('deleted', message => {
-      let messages = this.state.messages;
-
-      messages = messages.filter(function (item) {
-        return item.id != message.id;
-      });
-
-      this.setState({ messages });
+    this.app.service('messages').on('removed', result => {
+      this.deleteMessage(result);
     });
   }
 
@@ -99,6 +93,17 @@ export default class Chat extends Component {
       image: {uri: message.sentBy.photoURL},
       date: new Date(message.createdAt)
     };
+  }
+
+  deleteMessage(messageToRemove) {
+
+    let messages = this.state.messages;
+    let idToRemove = messageToRemove.id ? messageToRemove.id : messageToRemove._id;
+    messages = messages.filter(function (message) {
+      return message.id != idToRemove;
+    });
+
+    this.setState({messages});
   }
 
   loadMessages() {
@@ -147,7 +152,7 @@ export default class Chat extends Component {
     });
   }
 
-  longPressMessage(messageData, rowId) {
+  promptToDeleteMessage(messageData, rowId) {
     //TODO: Validate that this is a message created by this user before showing alert
     Alert.alert(
       'Delete Message',
@@ -157,12 +162,7 @@ export default class Chat extends Component {
         {
           text: 'Yes, Delete It!', onPress: () => {
           this.app.service('messages').remove(messageData.id).then(result => {
-            let messages = this.state.messages;
-
-            messages = messages.filter(function (message) {
-              return message.id != messageData.id;
-            });
-            this.setState({messages});
+            this.deleteMessage(messageData);
           }).catch((error) => {
             console.log('ERROR deleting message');
             console.log(error);
@@ -187,7 +187,7 @@ export default class Chat extends Component {
           ref={(c) => this._GiftedMessenger = c}
           messages={this.state.messages}
           handleSend={this.sendMessage.bind(this)}
-          onMessageLongPress={this.longPressMessage.bind(this)}
+          onMessageLongPress={this.promptToDeleteMessage.bind(this)}
           onLoadEarlierMessages={this.loadEarlierMessages}
           loadEarlierMessagesButton={this.state.hasMoreMessages}
           maxHeight={Platform.OS === 'ios' ? Dimensions.get('window').height -  65 : Dimensions.get('window').height - 85 }
