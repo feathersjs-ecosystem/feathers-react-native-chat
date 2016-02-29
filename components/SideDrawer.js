@@ -1,6 +1,6 @@
 var React = require('react-native');
 
-var { Text, View, Image, StyleSheet, ListView, TouchableHighlight} = React;
+var { Text, View, Image, StyleSheet, ListView, TouchableHighlight, Platform} = React;
 var Drawer = require('react-native-drawer');
 var baseStyles = require('../baseStyles');
 var Actions = require('react-native-router-flux').Actions;
@@ -64,12 +64,12 @@ export default class SideDrawer extends React.Component {
   _renderDrawerContent() {
     return (
       <View style={{marginTop: 0, flex: 1}}>
-        <View style={{marginTop: 0, alignItems: 'center'}}>
+        <View style={styles.userCountContainer}>
           <Text style={styles.userCount}>{this.state.count} People Online</Text>
         </View>
         <ListView
           dataSource={this.ds.cloneWithRows(this.state.users)}
-          style={{padding:10, flex: 0.9}}
+          style={{padding:10, flex: 0.93}}
           renderRow={(user, sectionID, rowID) => (
 
           <TouchableHighlight onPress={() => this._pressRow(user, sectionID, rowID)}>
@@ -83,9 +83,9 @@ export default class SideDrawer extends React.Component {
           )}
         />
 
-        <View style={{flex: 0.1, alignItems: 'center', justifyContent: 'center'}}>
-          <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary, {width: 120, padding: 5}]} onPress={this._signOut.bind(this)}>
-            <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>Sign Out</Text>
+        <View style={{flex: 0.07, alignItems: 'center', justifyContent: 'center'}}>
+          <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary, {width: 120, padding: 0}]} onPress={this._signOut.bind(this)}>
+            <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText, {fontSize: 14, fontWeight:'600'}]}>Sign Out</Text>
           </TouchableHighlight>
         </View>
       </View>
@@ -102,7 +102,7 @@ export default class SideDrawer extends React.Component {
         openDrawerOffset={0.6}
         panCloseMask={0.8}
         closedDrawerOffset={-3}
-        styles={{main: {}, drawer : {backgroundColor: '#333'}}}
+        styles={{main: {}, drawer : {backgroundColor: '#dfdfdf'}}}
         tweenHandler={Drawer.tweenPresets.parallax}
       >
         {React.Children.map(this.props.children, c => React.cloneElement(c, {
@@ -126,20 +126,24 @@ var styles = StyleSheet.create({
   userCount: {
     marginTop: 5,
     marginBottom: 5,
-    color: '#f8f8f8',
+    color: '#777',
     justifyContent: 'center'
+  },
+  userCountContainer : {
+    marginTop: Platform.OS === 'ios' ? 25 : 0,
+    alignItems: 'center'
   },
   avatar: {
     width: 24,
     height: 24,
-    backgroundColor: '#fff',
+    //backgroundColor: '#fff',
     borderRadius: 12
   },
   username: {
     fontSize: 16,
     fontWeight: '600',
     padding: 5,
-    color: '#f8f8f8',
+    color: '#333',
     height: 24,
     marginLeft: 5
   }

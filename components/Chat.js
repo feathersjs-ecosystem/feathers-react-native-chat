@@ -24,27 +24,17 @@ export default class Chat extends Component {
     this.state = {
       online: true,
       messages: [],
-      skip: 0
-    }
+      skip: 0,
+      hasMoreMessages : false
+    };
 
     this.formatMessage = this.formatMessage.bind(this);
     this.loadMessages = this.loadMessages.bind(this);
+    this.loadEarlierMessages = this.loadEarlierMessages.bind(this);
   }
 
-  //componentWillUpdate(nextProps, nextState) {
-  //  console.log('componentWillUpdate');
-  //  console.log(nextProps);
-  //  console.log(nextState);
-  //}
-  //
-  //componentWillReceiveProps (nextProps) {
-  //  console.log('componentWillReceiveProps', nextProps);
-  //  //this.setState({
-  //  //  likesIncreasing: nextProps.likeCount > this.props.likeCount
-  //  //});
-  //}
-
   componentDidMount(props) {
+    this._GiftedMessenger.setState({allLoaded: false});
     console.log('componentDidMount chat props', props);
     var self = this;
 
@@ -58,7 +48,7 @@ export default class Chat extends Component {
         console.log('socket:connect!');
         var prevState = this.state.online;
         self.setState({online: true});
-        if(!prevState)
+        if (!prevState)
           this.loadMessages();
       });
     }
@@ -72,7 +62,7 @@ export default class Chat extends Component {
       const messages = this.state.messages;
       messages.push(this.formatMessage(message));
 
-      this.setState({ messages });
+      this.setState({messages});
     });
 
     this.app.service('messages').on('deleted', message => {
@@ -93,7 +83,6 @@ export default class Chat extends Component {
 
 
   formatMessage(message) {
-    //console.log('Message', message);
 
     var isCurrentUser = false;
     if(typeof message.sentBy !== 'string') {
@@ -117,17 +106,33 @@ export default class Chat extends Component {
       return;
     }
 
-    const query = { query: { $sort: { updatedAt: -1 }, $skip: this.state.skip }};
-
+    const query = {query: {$sort: {updatedAt: -1}, $skip: this.state.skip}};
     this.app.service('messages').find(query).then(response => {
       const messages = [];
-      const skip = response.skip;
+      const skip = response.skip + response.limit;
 
       for (var message of response.data) {
         messages.unshift(this.formatMessage(message));
       }
 
-      this.setState({ messages, skip });
+      this.setState({messages, skip, hasMoreMessages: response.skip + response.limit < response.total});
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
+  loadEarlierMessages(oldestMessage, callback) {
+    const query = {query: {$sort: {updatedAt: -1}, $skip: this.state.skip}};
+    this.app.service('messages').find(query).then(response => {
+      const messages = [];
+      const skip = response.skip + response.limit;
+
+      for (var message of response.data) {
+        messages.unshift(this.formatMessage(message));
+      }
+      this.setState({skip, hasMoreMessages: response.skip + response.limit < response.total});
+      callback(messages, false);
+
     }).catch(error => {
       console.log(error);
     });
@@ -157,9 +162,9 @@ export default class Chat extends Component {
             messages = messages.filter(function (message) {
               return message.id != messageData.id;
             });
-
-            this.setState({ messages });
+            this.setState({messages});
           }).catch((error) => {
+            console.log('ERROR deleting message');
             console.log(error);
           });
         }
@@ -175,17 +180,17 @@ export default class Chat extends Component {
         <Text style={{marginTop: 30, fontWeight: '200', fontSize: 20}}>Please check your connection</Text>
       </View>);
     }
-    
+
     return (
       <View style={{flex: 1, marginTop: Platform.OS === 'ios' ? 65 : 55}}>
-      <GiftedMessenger
-        ref={(c) => this._GiftedMessenger = c}
-        messages={this.state.messages}
-        handleSend={this.sendMessage.bind(this)}
-        onMessageLongPress={this.longPressMessage.bind(this)}
-        loadEarlierMessagesButton={true}
-        onLoadEarlierMessages={this.loadMessages.bind(this)}
-        maxHeight={Platform.OS === 'ios' ? Dimensions.get('window').height -  65 : Dimensions.get('window').height - 85 }
+        <GiftedMessenger
+          ref={(c) => this._GiftedMessenger = c}
+          messages={this.state.messages}
+          handleSend={this.sendMessage.bind(this)}
+          onMessageLongPress={this.longPressMessage.bind(this)}
+          onLoadEarlierMessages={this.loadEarlierMessages}
+          loadEarlierMessagesButton={this.state.hasMoreMessages}
+          maxHeight={Platform.OS === 'ios' ? Dimensions.get('window').height -  65 : Dimensions.get('window').height - 85 }
           styles={{
           bubbleLeft: {
             backgroundColor: '#e6e6eb',
