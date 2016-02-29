@@ -76,10 +76,10 @@ export default class Chat extends Component {
     });
 
     this.app.service('messages').on('deleted', message => {
-      const messages = this.state.messages;
+      let messages = this.state.messages;
 
       messages = messages.filter(function (item) {
-        return item.id != messageData.id;
+        return item.id != message.id;
       });
 
       this.setState({ messages });
@@ -152,7 +152,7 @@ export default class Chat extends Component {
         {
           text: 'Yes, Delete It!', onPress: () => {
           this.app.service('messages').remove(messageData.id).then(result => {
-            const messages = this.state.messages;
+            let messages = this.state.messages;
 
             messages = messages.filter(function (message) {
               return message.id != messageData.id;
