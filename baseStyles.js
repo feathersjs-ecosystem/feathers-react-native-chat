@@ -1,5 +1,5 @@
 var React = require('react-native');
-var {StyleSheet, Dimensions} = React;
+var {StyleSheet, Dimensions, Platform} = React;
 
 
 module.exports = StyleSheet.create({
@@ -21,7 +21,7 @@ module.exports = StyleSheet.create({
   backButtonContainer: {
     width: 50,
     height: 50,
-    top: 15,
+    top: Platform.OS === 'ios' ? 25 : 10,
     left: 7,
     position: 'absolute'
   },
@@ -74,10 +74,11 @@ module.exports = StyleSheet.create({
     marginBottom: 10,
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingLeft: 5
   },
   inputContainer: {
-    width: 300,
+    width: Dimensions.get('window').width - 30,
     padding: 10,
     marginBottom: 5,
     height: 40

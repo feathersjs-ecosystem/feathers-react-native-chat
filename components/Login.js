@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react-native');
-var {View, Text, TextInput, TouchableHighlight, Alert} = React;
+var {View, Text, TextInput, TouchableHighlight, Alert, BackAndroid} = React;
 var Actions = require('react-native-router-flux').Actions;
 var baseStyles = require('../baseStyles');
 var Icon = require('react-native-vector-icons/Ionicons');
@@ -27,6 +27,10 @@ export default class Login extends React.Component {
       password: '',
       loading: false
     }
+  }
+
+  componentDidMount() {
+    BackAndroid.addEventListener('hardwareBackPress', () => Actions.pop());
   }
 
   login() {
@@ -99,7 +103,7 @@ export default class Login extends React.Component {
     return (
       <View style={baseStyles.container}>
         <TouchableHighlight onPress={Actions.pop} underlayColor="transparent"
-                            style={[baseStyles.backButtonContainer, {top:10, left: 10}]}>
+                            style={[baseStyles.backButtonContainer]}>
           <Icon name="close-round" size={30} color="#999"/>
         </TouchableHighlight>
         <Text style={baseStyles.welcomeText}>WELCOME BACK</Text>

@@ -1,7 +1,7 @@
 var React = require('react-native');
 
 var Actions = require('react-native-router-flux').Actions;
-var { View, Text, TextInput, TouchableHighlight, Alert } = React;
+var { View, Text, TextInput, TouchableHighlight, Alert, BackAndroid } = React;
 
 var baseStyles = require('../baseStyles');
 var utils = require('../utils');
@@ -24,6 +24,10 @@ export default class Signup extends React.Component {
       password: '',
       loading: false
     }
+  }
+
+  componentDidMount() {
+    BackAndroid.addEventListener('hardwareBackPress', () => Actions.pop());
   }
 
   onChangeUsername(text) {
@@ -93,7 +97,7 @@ export default class Signup extends React.Component {
     return (
       <View style={baseStyles.container}>
         <TouchableHighlight onPress={Actions.pop} underlayColor="transparent"
-                            style={[baseStyles.backButtonContainer, {top:10, left: 10}]}>
+                            style={[baseStyles.backButtonContainer]}>
           <Icon name="close-round" size={30} color="#999" />
         </TouchableHighlight>
         <Text style={baseStyles.welcomeText}>CREATE ACCOUNT</Text>
