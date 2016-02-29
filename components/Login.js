@@ -49,7 +49,7 @@ export default class Login extends React.Component {
       // re-route to chat app
       Actions.main();
     }).catch(error => {
-      console.log(error);
+      console.log('ERROR', error);
       Alert.alert('Error', 'Please enter a valid username or password.');
       this.setState({ loading: false });
       return;

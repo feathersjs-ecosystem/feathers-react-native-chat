@@ -15,7 +15,7 @@ export default class SideDrawer extends React.Component {
     this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.state = {
-      count: 0,
+      onlineUserCount: 0,
       users: []
     };
 
@@ -38,7 +38,7 @@ export default class SideDrawer extends React.Component {
         .find(query)
         .then(result => {
           this.setState({
-            count: result.total,
+            onlineUserCount: result.total,
             users: result.data
           });
         })
@@ -62,10 +62,19 @@ export default class SideDrawer extends React.Component {
   }
 
   _renderDrawerContent() {
+    let onlinePhrase = 'No one\'s online';
+
+    if (this.state.onlineUserCount === 1) {
+      onlinePhrase = `${this.state.onlineUserCount} person online`;
+    }
+    else if (this.state.onlineUserCount > 1) {
+      onlinePhrase = `${this.state.onlineUserCount} people online`;
+    }
+
     return (
       <View style={{marginTop: 0, flex: 1}}>
         <View style={styles.userCountContainer}>
-          <Text style={styles.userCount}>{this.state.count} People Online</Text>
+          <Text style={styles.userCount}>{onlinePhrase}</Text>
         </View>
         <ListView
           dataSource={this.ds.cloneWithRows(this.state.users)}
@@ -91,8 +100,10 @@ export default class SideDrawer extends React.Component {
       </View>
     )
   }
-// shadowColor: "#000000", shadowOpacity: 0.4, shadowRadius: 3
+
   render() {
+    const drawerStyles = {main: {shadowColor: "#000000", shadowOpacity: 0.3, shadowRadius: 2, elevation: 14, backgroundColor: '#fff'}, drawer : { backgroundColor: '#F1F1F1' }};
+
     return (
       <Drawer
         ref="drawer"
@@ -102,8 +113,14 @@ export default class SideDrawer extends React.Component {
         openDrawerOffset={0.6}
         panCloseMask={0.8}
         closedDrawerOffset={-3}
-        styles={{main: {}, drawer : {backgroundColor: '#dfdfdf'}}}
+        negotiatePan={true}
+        styles={drawerStyles}
+        // tweenHandler={(ratio) => ({
+        //   main: { opacity: (2 - ratio) / 1.5 }
+        // })}
         tweenHandler={Drawer.tweenPresets.parallax}
+        tweenDuration={150}
+        tweenEasing="easeInOutBounce"
       >
         {React.Children.map(this.props.children, c => React.cloneElement(c, {
           route: this.props.route
@@ -116,6 +133,7 @@ export default class SideDrawer extends React.Component {
     this.refs.drawer.toggle();
   }
 }
+
 var styles = StyleSheet.create({
   userContainer: {
     flex: 1,
@@ -136,16 +154,23 @@ var styles = StyleSheet.create({
   avatar: {
     width: 24,
     height: 24,
-    //backgroundColor: '#fff',
     borderRadius: 12
   },
   username: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '400',
     padding: 5,
     color: '#333',
     height: 24,
     marginLeft: 5
+  },
+  drawerMain: {
+    shadowColor: "#000000",
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    elevation: 14
+  },
+  drawer: {
+    backgroundColor: '#F1F1F1'
   }
-
 });

@@ -84,9 +84,9 @@ export default class Application extends React.Component {
     if(this.state.connected) {
     return (
       <TouchableHighlight onPress={this.showsidemenu}
-                          underlayColor="transparent"
+                          underlayColor='transparent'
                           style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent', marginLeft: 0, width: 50, height: 50}}>
-        <Icon name="ios-people" size={36} color={baseStyles.colors.accentColor}/>
+        <Icon name='ios-people' size={36} color={baseStyles.colors.accentColor}/>
       </TouchableHighlight>
 
     );
@@ -103,19 +103,15 @@ export default class Application extends React.Component {
 
     return (
       <Router hideNavBar={true}>
-        <Schema name="modal" sceneConfig={Navigator.SceneConfigs.FloatFromBottom}/>
-        <Schema name="modalNoNav" sceneConfig={Navigator.SceneConfigs.FloatFromBottom} hideNavBar={true}/>
-        <Schema name="default" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
-        <Schema name="withoutAnimation"/>
-
+        <Schema name='modal' sceneConfig={Navigator.SceneConfigs.FloatFromBottom} hideNavBar={true}/>
+        <Schema name='default' sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
         <Schema name='boot' sceneConfig={Navigator.SceneConfigs.FadeAndroid} hideNavBar={true} type='replace'/>
         <Schema name='main' sceneConfig={Navigator.SceneConfigs.FadeAndroid} hideNavBar={false}  />
 
-        <Route name="launch" component={Launch} wrapRouter={true} title="Launch" hideNavBar={true} schema="boot"
-               initial={true}/>
+        <Route name='launch' component={Launch} wrapRouter={true} title='Launch' hideNavBar={true} schema='boot' initial={true}/>
 
-        <Route name='main' hideNavBar={true} type='reset'>
-          <SideDrawer ref="sidedrawer" app={this.app}>
+        <Route schema='main' name='main' hideNavBar={true} type='reset'>
+          <SideDrawer ref='sidedrawer' app={this.app}>
             <Router sceneStyle={{flex: 1, backgroundColor: '#fff' }}>
               <Route schema='main' component={Chat} name='chat' title='Chat' renderLeftButton={this.renderLeftButton}
                      app={this.app} events={this.eventEmitter}/>
@@ -125,8 +121,8 @@ export default class Application extends React.Component {
           </SideDrawer>
         </Route>
 
-        <Route name="login" component={Login} title="Login" schema="modal" app={this.app}/>
-        <Route name="signup" component={Signup} title="Signup" schema="modal" app={this.app}/>
+        <Route name='login' component={Login} title='Login' schema='modal' app={this.app}/>
+        <Route name='signup' component={Signup} title='Signup' schema='modal' app={this.app}/>
 
       </Router>
     );

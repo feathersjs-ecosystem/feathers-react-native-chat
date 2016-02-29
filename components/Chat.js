@@ -34,7 +34,7 @@ export default class Chat extends Component {
   }
 
   componentDidMount(props) {
-    this._GiftedMessenger.setState({allLoaded: false});
+    // this._GiftedMessenger.setState({allLoaded: false});
     console.log('componentDidMount chat props', props);
     var self = this;
 
@@ -77,7 +77,6 @@ export default class Chat extends Component {
 
 
   formatMessage(message) {
-
     var isCurrentUser = false;
     if(typeof message.sentBy !== 'string') {
       isCurrentUser = message.sentBy._id === this.user._id;
@@ -112,7 +111,8 @@ export default class Chat extends Component {
     }
 
     const query = {query: {$sort: {updatedAt: -1}, $skip: this.state.skip}};
-    this.app.service('messages').find(query).then(response => {
+
+    return this.app.service('messages').find(query).then(response => {
       const messages = [];
       const skip = response.skip + response.limit;
 
@@ -182,7 +182,7 @@ export default class Chat extends Component {
           maxHeight={Platform.OS === 'ios' ? Dimensions.get('window').height -  65 : Dimensions.get('window').height - 85 }
           styles={{
           bubbleLeft: {
-            backgroundColor: '#e6e6eb',
+            backgroundColor: '#F1F1F1',
             marginRight: 70
           },
           bubbleRight: {
