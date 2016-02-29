@@ -176,6 +176,7 @@ export default class Chat extends Component {
         messages={this.state.messages}
         handleSend={this.sendMessage.bind(this)}
         onMessageLongPress={this.longPressMessage.bind(this)}
+        loadEarlierMessagesButton={true}
         onLoadEarlierMessages={this.loadMessages.bind(this)}
         maxHeight={Platform.OS === 'ios' ? Dimensions.get('window').height -  65 : Dimensions.get('window').height - 85 }
           styles={{

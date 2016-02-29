@@ -10,19 +10,42 @@ var Button = require('react-native-button');
 export default class SideDrawer extends React.Component {
   constructor(props) {
     super(props);
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
-    //TODO: Load online users from service
-    var users = [
-      {id: 1, name: 'User 1', avatar: 'http://feathersjs.com/images/logo.png'},
-      {id: 2, name: 'User 2', avatar: 'http://feathersjs.com/images/logo.png'}
-    ];
-    this.state = {
-      dataSource: ds.cloneWithRows(users)
-    }
-
+    
     this.app = props.app;
-    this._signOut = this._signOut.bind(this);
+    this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
+    this.state = {
+      count: 0,
+      users: []
+    };
+
+    this._renderDrawerContent = this._renderDrawerContent.bind(this);
+  }
+
+  componentDidMount() {
+    this.app.user().then(user => {
+      // Find all online users that are not me
+      const query = {
+        query: {
+          online: true,
+          _id: { $nin: [user._id] }
+        }
+      };
+
+      this.app.service('users')
+        .find(query)
+        .then(result => {
+          this.setState({
+            count: result.total,
+            users: result.data
+          });
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }).catch(error => {
+      console.log(error);
+    });
   }
 
   _pressRow(user, sectionID, rowID) {
@@ -36,19 +59,22 @@ export default class SideDrawer extends React.Component {
     this.app.logout().then(() => Actions.launch());
   }
 
-  renderDrawerContent() {
+  _renderDrawerContent() {
     return (
       <View style={{marginTop: 0, flex: 1}}>
+        <View style={{marginTop: 0, alignItems: 'center'}}>
+          <Text style={styles.userCount}>{this.state.count} People Online</Text>
+        </View>
         <ListView
-          dataSource={this.state.dataSource}
+          dataSource={this.ds.cloneWithRows(this.state.users)}
           style={{padding:10, flex: 0.9}}
           renderRow={(user, sectionID, rowID) => (
 
           <TouchableHighlight onPress={() => this._pressRow(user, sectionID, rowID)}>
             <View style={styles.userContainer}>
-              <Image source={{uri: user.avatar}} style={styles.avatar}/>
+              <Image source={{uri: user.photoURL}} style={styles.avatar}/>
               <Text style={styles.username}>
-                {user.name}
+                {user.username}
               </Text>
             </View>
           </TouchableHighlight>
@@ -56,7 +82,7 @@ export default class SideDrawer extends React.Component {
         />
 
         <View style={{flex: 0.1, alignItems: 'center', justifyContent: 'center'}}>
-          <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary, {width: 120, padding: 5}]} onPress={this._signOut}>
+          <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary, {width: 120, padding: 5}]} onPress={this._signOut.bind(this)}>
             <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>Sign Out</Text>
           </TouchableHighlight>
         </View>
@@ -69,7 +95,7 @@ export default class SideDrawer extends React.Component {
       <Drawer
         ref="drawer"
         type="static"
-        content={this.renderDrawerContent()}
+        content={this._renderDrawerContent()}
         tapToClose={true}
         openDrawerOffset={0.6}
         panCloseMask={0.8}
@@ -95,6 +121,12 @@ var styles = StyleSheet.create({
     marginBottom: 3,
     alignItems: 'center'
   },
+  userCount: {
+    marginTop: 5,
+    marginBottom: 5,
+    color: '#f8f8f8',
+    justifyContent: 'center'
+  },
   avatar: {
     width: 24,
     height: 24,
@@ -105,7 +137,7 @@ var styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     padding: 5,
-    color: 'white',
+    color: '#f8f8f8',
     height: 24,
     marginLeft: 5
   }
