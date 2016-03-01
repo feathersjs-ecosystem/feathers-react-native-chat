@@ -2,6 +2,7 @@
 
 var React = require('react-native');
 var {View, Text, TextInput, TouchableHighlight, Alert, BackAndroid} = React;
+var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
 var Actions = require('react-native-router-flux').Actions;
 var baseStyles = require('../baseStyles');
 var Icon = require('react-native-vector-icons/Ionicons');
@@ -82,6 +83,15 @@ export default class Login extends React.Component {
     }
   }
 
+  _close() {
+    this._dismissKeyboard();
+    Actions.pop();
+  }
+
+  _dismissKeyboard(el) {
+    TextInput.State.blurTextInput(TextInput.State.currentlyFocusedField())
+  }
+
   renderLoginButton() {
     if (this.state.loading) {
       return (
@@ -92,7 +102,7 @@ export default class Login extends React.Component {
     }
     return (
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary]} onPress={this.login} underlayColor="transparent">
+        <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary, {padding: 10}]} onPress={this.login} underlayColor="transparent">
           <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>Login</Text>
         </TouchableHighlight>
       </View>
@@ -101,42 +111,45 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <View style={baseStyles.container}>
-        <TouchableHighlight onPress={Actions.pop} underlayColor="transparent"
-                            style={[baseStyles.backButtonContainer]}>
-          <Icon name="close-round" size={30} color="#999"/>
-        </TouchableHighlight>
-        <Text style={baseStyles.welcomeText}>WELCOME BACK</Text>
+      <TouchableWithoutFeedback onPress={this._dismissKeyboard.bind(this)}>
+        <View style={baseStyles.container}>
+          <TouchableHighlight onPress={this._close.bind(this)} underlayColor="transparent"
+                              style={[baseStyles.backButtonContainer]}>
+            <Icon name="close-round" size={30} color="#999"/>
+          </TouchableHighlight>
+          <Text style={baseStyles.welcomeText}>WELCOME BACK</Text>
 
-        <View style={baseStyles.inputs}>
-          <View style={baseStyles.inputContainer}>
+          <View style={baseStyles.inputs}>
+            <View style={baseStyles.inputContainer}>
 
-            <TextInput
-              style={[baseStyles.input, baseStyles.greyFont, {borderWidth: 1, borderColor: this.state.usernameBorder}]}
-              autoFocus={true}
-              placeholder="Username"
-              placeholderTextColor="#AAA"
-              autoCorrect={false}
-              autoCapitalize='none'
-              value={this.state.username}
-              onChangeText={this.onChangeUsername}
-            />
+              <TextInput
+                style={[baseStyles.input, baseStyles.greyFont, {borderWidth: 1, borderColor: this.state.usernameBorder}]}
+                autoFocus={true}
+                placeholder="Username"
+                placeholderTextColor="#AAA"
+                autoCorrect={false}
+                autoCapitalize='none'
+                value={this.state.username}
+                onChangeText={this.onChangeUsername}
+              />
+            </View>
+            <View style={baseStyles.inputContainer}>
+              <TextInput
+                password={true}
+                style={[baseStyles.input, baseStyles.greyFont, {borderWidth: 1, borderColor: this.state.passwordBorder}]}
+                placeholder="Password"
+                placeholderTextColor="#AAA"
+                autoCorrect={false}
+                autoCapitalize='none'
+                value={this.state.password}
+                onChangeText={this.onChangePassword}
+              />
+            </View>
+            {this.renderLoginButton()}
           </View>
-          <View style={baseStyles.inputContainer}>
-            <TextInput
-              password={true}
-              style={[baseStyles.input, baseStyles.greyFont, {borderWidth: 1, borderColor: this.state.passwordBorder}]}
-              placeholder="Password"
-              placeholderTextColor="#AAA"
-              autoCorrect={false}
-              autoCapitalize='none'
-              value={this.state.password}
-              onChangeText={this.onChangePassword}
-            />
-          </View>
-          {this.renderLoginButton()}
         </View>
-      </View>);
+      </TouchableWithoutFeedback>
+    );
   }
 
 }

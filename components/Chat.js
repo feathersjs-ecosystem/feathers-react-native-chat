@@ -179,6 +179,8 @@ export default class Chat extends Component {
           onMessageLongPress={this.promptToDeleteMessage.bind(this)}
           onLoadEarlierMessages={this.loadMessages}
           loadEarlierMessagesButton={this.state.hasMoreMessages}
+          keyboardDismissMode="on-drag"
+          autoFocus={false}
           maxHeight={Platform.OS === 'ios' ? Dimensions.get('window').height -  65 : Dimensions.get('window').height - 85 }
           styles={{
           bubbleLeft: {

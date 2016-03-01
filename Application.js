@@ -37,7 +37,7 @@ export default class Application extends React.Component {
 
     this.eventEmitter = new EventEmitter();
     const options = {transports: ['websocket'], forceNew: true};
-    const socket = io('http://chat.feathersjs.local:3030', options);
+    const socket = io('http://192.168.0.1:3030', options);
 
     this.state = {connected: false};
     this.app = feathers()

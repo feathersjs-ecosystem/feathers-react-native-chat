@@ -2,7 +2,7 @@ var React = require('react-native');
 
 var Actions = require('react-native-router-flux').Actions;
 var { View, Text, TextInput, TouchableHighlight, Alert, BackAndroid } = React;
-
+var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
 var baseStyles = require('../baseStyles');
 var utils = require('../utils');
 var Icon = require('react-native-vector-icons/Ionicons');
@@ -93,45 +93,13 @@ export default class Signup extends React.Component {
     });
   }
 
-  render() {
-    return (
-      <View style={baseStyles.container}>
-        <TouchableHighlight onPress={Actions.pop} underlayColor="transparent"
-                            style={[baseStyles.backButtonContainer]}>
-          <Icon name="close-round" size={30} color="#999" />
-        </TouchableHighlight>
-        <Text style={baseStyles.welcomeText}>Create Account</Text>
+  _close() {
+    this._dismissKeyboard();
+    Actions.pop();
+  }
 
-        <View style={baseStyles.inputs}>
-          <View style={baseStyles.inputContainer}>
-
-            <TextInput
-              style={[baseStyles.input, baseStyles.darkFont, {borderWidth: 1, borderColor: this.state.usernameBorder}]}
-              autoFocus={true}
-              placeholder="Username"
-              placeholderTextColor="#AAA"
-              autoCorrect={false}
-              autoCapitalize='none'
-              value={this.state.username}
-              onChangeText={this.onChangeUsername}
-            />
-          </View>
-          <View style={baseStyles.inputContainer}>
-
-            <TextInput
-              password={true}
-              style={[baseStyles.input, baseStyles.darkFont, {borderWidth: 1, borderColor: this.state.passwordBorder}]}
-              placeholder="Password"
-              placeholderTextColor="#AAA"
-              autoCorrect={false}
-              autoCapitalize='none'
-              value={this.state.password}
-              onChangeText={this.onChangePassword}
-            />
-          </View>
-          {this.renderButton()}
-        </View>
-      </View>);
+  _dismissKeyboard(el) {
+    TextInput.State.blurTextInput(TextInput.State.currentlyFocusedField())
   }
 
   renderButton() {
@@ -149,5 +117,48 @@ export default class Signup extends React.Component {
         </TouchableHighlight>
       </View>
     )
+  }
+
+  render() {
+    return (
+      <TouchableWithoutFeedback onPress={this._dismissKeyboard.bind(this)}>
+        <View style={baseStyles.container}>
+          <TouchableHighlight style={[baseStyles.backButtonContainer, {padding: 10}]} onPress={this._close.bind(this)} underlayColor="transparent">
+            <Icon name="close-round" size={30} color="#999" />
+          </TouchableHighlight>
+          <Text style={baseStyles.welcomeText}>Create Account</Text>
+
+          <View style={baseStyles.inputs}>
+            <View style={baseStyles.inputContainer}>
+
+              <TextInput
+                style={[baseStyles.input, baseStyles.darkFont, {borderWidth: 1, borderColor: this.state.usernameBorder}]}
+                autoFocus={true}
+                placeholder="Username"
+                placeholderTextColor="#AAA"
+                autoCorrect={false}
+                autoCapitalize='none'
+                value={this.state.username}
+                onChangeText={this.onChangeUsername}
+              />
+            </View>
+            <View style={baseStyles.inputContainer}>
+
+              <TextInput
+                password={true}
+                style={[baseStyles.input, baseStyles.darkFont, {borderWidth: 1, borderColor: this.state.passwordBorder}]}
+                placeholder="Password"
+                placeholderTextColor="#AAA"
+                autoCorrect={false}
+                autoCapitalize='none'
+                value={this.state.password}
+                onChangeText={this.onChangePassword}
+              />
+            </View>
+            {this.renderButton()}
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    );
   }
 }
