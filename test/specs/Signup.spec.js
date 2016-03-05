@@ -66,16 +66,14 @@ describe('<Signup />', () => {
       mockFeathersApp = {
         service: function () {
           return {
-            create: function () {
-              return new Promise(function(resolve,reject){
-               resolve('12324');
-              });
+            create: function() {
+
             }
           }
         },
         authenticate : authenticate
       };
-      createUser = sinon.spy(mockFeathersApp.service('users'), 'create');//.resolves('fuck');
+      createUser = sinon.stub(mockFeathersApp.service('users'), 'create');
       done();
     });
 
@@ -83,13 +81,17 @@ describe('<Signup />', () => {
       createUser.restore();
       done();
     });
-    it('calls create() when input valid', () => {
-      const wrapper = mount(<Signup app={mockFeathersApp}/>);
-      wrapper.node.setState({username: 'test', password: 'test'});
-      wrapper.node.signup();
 
-      expect(authenticate.calledOnce).to.equal(true);
-      expect(authenticate.calledWith({type: 'local', username: 'test', password: 'test'})).to.be.ok;
+    it('calls create() when input valid', () => {
+      expect(false).to.equal(true);
+    });
+
+    it('calls authenticate() after creating an account.', () => {
+      expect(false).to.equal(true);
+    });
+
+    it('fires the main route after successful authentication', () => {
+      expect(false).to.equal(true);
     });
   });
 });

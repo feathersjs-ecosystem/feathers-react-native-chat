@@ -10,11 +10,11 @@ import React, {
   TouchableHighlight,
   Alert
 } from 'react-native';
+import GiftedMessenger from 'react-native-gifted-messenger'
 
 var Icon = require('react-native-vector-icons/FontAwesome');
 var baseStyles = require('../baseStyles');
 
-import GiftedMessenger from 'react-native-gifted-messenger'
 
 export default class Chat extends Component {
   constructor(props) {

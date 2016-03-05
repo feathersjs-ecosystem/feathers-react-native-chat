@@ -4,8 +4,6 @@ var { Text, View, Image, StyleSheet, ListView, TouchableHighlight, Platform} = R
 var Drawer = require('react-native-drawer');
 var baseStyles = require('../baseStyles');
 var Actions = require('react-native-router-flux').Actions;
-var Button = require('react-native-button');
-
 
 export default class SideDrawer extends React.Component {
   constructor(props) {
@@ -74,7 +72,7 @@ export default class SideDrawer extends React.Component {
     return (
       <View style={{marginTop: 0, flex: 1}}>
         <View style={styles.userCountContainer}>
-          <Text style={styles.userCount}>{onlinePhrase}</Text>
+          <Text ref="usersonline" style={styles.userCount}>{onlinePhrase}</Text>
         </View>
         <ListView
           dataSource={this.ds.cloneWithRows(this.state.users)}

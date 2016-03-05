@@ -6,6 +6,7 @@ var sinon = require('sinon');
 
 require('sinon-as-promised');
 
+//TODO: Find a better way to mock / stub this out
 export class DataSource {
   constructor() {
 
@@ -20,7 +21,6 @@ describe('<SideDrawer />', () => {
   ListView.DataSource = DataSource;
 
   var mockFeathersApp;
-
   beforeEach((done) => {
 
     mockFeathersApp = {
@@ -33,7 +33,6 @@ describe('<SideDrawer />', () => {
           })
         }
       },
-      authenticate: sinon.stub().resolves({'token': "TOKEN"}),
       logout: sinon.stub().resolves({}),
       user: sinon.stub().resolves({})
     };
@@ -45,22 +44,17 @@ describe('<SideDrawer />', () => {
   });
 
   it('render the # of users online', () => {
-    const wrapper = mount(<SideDrawer app={mockFeathersApp}/>);
-    let items = wrapper.findWhere((component) => {
-      return false;//component.props().children === "No one's online.";
-    });
-
-    wrapper.setState({'onlineUserCount': 10});
+    expect(false).to.equal(true);
   });
 
   it('renders a list of users', () => {
-    const wrapper = mount(<SideDrawer app={mockFeathersApp}/>);
-
+    expect(false).to.equal(true);
     });
 
   it('logs out', () => {
     const wrapper = mount(<SideDrawer app={mockFeathersApp}/>);
     wrapper.node._signOut();
     expect(mockFeathersApp.logout.calledOnce).to.equal(true);
+    //TODO: verify that Actions.launch was called
   });
 });

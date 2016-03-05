@@ -9,18 +9,15 @@ require('sinon-as-promised');
 describe('<Chat />', () => {
 
   it('renders messages', () => {
-    const wrapper = shallow(<Chat />);
-
+    expect(false).to.equal(true);
   });
 
   it('hides the chat interface when offline', () => {
-    const wrapper = shallow(<Chat />);
-
+    expect(false).to.equal(true);
   });
 
   it('shows the chat interface when online', () => {
-    const wrapper = shallow(<Chat />);
-
+    expect(false).to.equal(true);
   });
 
 });
