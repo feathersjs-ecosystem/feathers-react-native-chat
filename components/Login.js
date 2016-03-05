@@ -1,9 +1,9 @@
 'use strict';
 
 var React = require('react-native');
-var {View, Text, TextInput, TouchableHighlight, Alert, BackAndroid} = React;
-var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
 var Actions = require('react-native-router-flux').Actions;
+var {View, Text, TextInput, TouchableHighlight, TouchableWithoutFeedback, Alert, BackAndroid} = React;
+
 var baseStyles = require('../baseStyles');
 var Icon = require('react-native-vector-icons/Ionicons');
 var utils = require('../utils');
@@ -35,25 +35,29 @@ export default class Login extends React.Component {
   }
 
   login() {
-    // if(!utils.validateUsername(this.state.username) || !utils.validatePassword(this.state.password)) {
-    //   Alert.alert('Error', 'Please enter a valid username or password.');
-    //   return;
-    // }
+    //console.log('LOGIN!!!!');
+    if (!utils.validateUsername(this.state.username)) {
+      Alert.alert('Error', 'Please enter a valid username.');
+      return;
+    } else if(!utils.validatePassword(this.state.password)) {
+      Alert.alert('Error', 'Please enter a valid password.');
+      return;
+    }
+
     this.setState({loading: true});
-    
+
     this.app.authenticate({
       type: 'local',
       username: this.state.username,
       password: this.state.password
     }).then(response => {
-      this.setState({ loading: false });
+      this.setState({loading: false});
       // re-route to chat app
       Actions.main();
     }).catch(error => {
       console.log('ERROR', error);
       Alert.alert('Error', 'Please enter a valid username or password.');
-      this.setState({ loading: false });
-      return;
+      this.setState({loading: false});
     });
   }
 
@@ -102,7 +106,8 @@ export default class Login extends React.Component {
     }
     return (
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary, {padding: 10}]} onPress={this.login} underlayColor="transparent">
+        <TouchableHighlight ref="submit" style={[baseStyles.baseButton, baseStyles.buttonPrimary, {padding: 10}]}
+                            onPress={this.login} underlayColor="transparent">
           <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>Login</Text>
         </TouchableHighlight>
       </View>
