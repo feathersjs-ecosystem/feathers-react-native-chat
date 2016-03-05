@@ -8,9 +8,6 @@ var baseStyles = require('../baseStyles');
 var Icon = require('react-native-vector-icons/Ionicons');
 var utils = require('../utils');
 
-//import Spinner from "../Spinner"
-//import Alert from "../../../alert"
-
 export default class Login extends React.Component {
 
   constructor(props) {

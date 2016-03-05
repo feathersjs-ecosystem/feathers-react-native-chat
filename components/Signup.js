@@ -1,8 +1,7 @@
 var React = require('react-native');
 
 var Actions = require('react-native-router-flux').Actions;
-var { View, Text, TextInput, TouchableHighlight, Alert, BackAndroid } = React;
-var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
+var { View, Text, TextInput, TouchableHighlight, Alert, BackAndroid, TouchableWithoutFeedback } = React;
 var baseStyles = require('../baseStyles');
 var utils = require('../utils');
 var Icon = require('react-native-vector-icons/Ionicons');
@@ -13,7 +12,7 @@ export default class Signup extends React.Component {
     super(props);
     this.app = this.props.app;
 
-    this.register = this.register.bind(this);
+    this.signup = this.signup.bind(this);
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
 
@@ -56,11 +55,14 @@ export default class Signup extends React.Component {
     }
   }
 
-  register() {
+  signup() {
     var self = this;
 
-    if(!utils.validateUsername(this.state.username) || !utils.validatePassword(this.state.password)) {
-      Alert.alert('Please enter a valid username or password.');
+    if (!utils.validateUsername(this.state.username)) {
+      Alert.alert('Error', 'Please enter a valid username.');
+      return;
+    } else if(!utils.validatePassword(this.state.password)) {
+      Alert.alert('Error', 'Please enter a valid password.');
       return;
     }
 
@@ -112,7 +114,7 @@ export default class Signup extends React.Component {
     }
     return (
       <View style={{justifyContent: 'center', alignItems: 'center', height: 50, flexDirection: 'column'}}>
-        <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary]} onPress={this.register} underlayColor="transparent">
+        <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary]} onPress={this.signup} underlayColor="transparent">
           <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>Create Account</Text>
         </TouchableHighlight>
       </View>
@@ -126,7 +128,7 @@ export default class Signup extends React.Component {
           <TouchableHighlight style={[baseStyles.backButtonContainer, {padding: 10}]} onPress={this._close.bind(this)} underlayColor="transparent">
             <Icon name="close-round" size={30} color="#999" />
           </TouchableHighlight>
-          <Text style={baseStyles.welcomeText}>Create Account</Text>
+          <Text style={baseStyles.welcomeText}>Signup to chat</Text>
 
           <View style={baseStyles.inputs}>
             <View style={baseStyles.inputContainer}>
