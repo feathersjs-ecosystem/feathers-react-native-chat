@@ -34,8 +34,6 @@ export default class Chat extends Component {
   }
 
   componentDidMount(props) {
-    // this._GiftedMessenger.setState({allLoaded: false});
-    console.log('componentDidMount chat props', props);
     var self = this;
 
     if (this.props.events) {
@@ -77,18 +75,11 @@ export default class Chat extends Component {
 
 
   formatMessage(message) {
-    var isCurrentUser = false;
-    if(typeof message.sentBy !== 'string') {
-      isCurrentUser = message.sentBy._id === this.user._id;
-    } else {
-      isCurrentUser = message.sentBy === this.user._id;
-    }
-
     return {
       id: message._id,
       name: message.sentBy.username,
       text: message.text,
-      position: isCurrentUser ? 'left' : 'right',
+      position: message.sentBy._id === this.user._id ? 'left' : 'right',
       image: {uri: message.sentBy.photoURL},
       date: new Date(message.createdAt)
     };
