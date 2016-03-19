@@ -3,6 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "push": "git push origin && git push origin --tags",
+    "release:prerelease": "npm version prerelease && npm run push",
+    "release:patch": "npm version patch && npm run push",
+    "release:minor": "npm version minor && npm run push",
+    "release:major": "npm version major && npm run push",
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
