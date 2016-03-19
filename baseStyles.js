@@ -31,8 +31,9 @@ module.exports = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '200',
     fontSize: 24,
+    letterSpacing: 1,
     fontFamily: 'HelveticaNeue',
-    color: '#777'
+    color: '#333'
   },
 
   baseButton: {
@@ -52,16 +53,17 @@ module.exports = StyleSheet.create({
   },
 
   buttonDefault : {
-    backgroundColor: '#BBB',
-    borderColor: '#BBB'
+    backgroundColor: '#DDD',
+    borderColor: '#DDD'
   },
   buttonDefaultText : {
     color: 'white'
   },
 
   buttonPrimary : {
-    backgroundColor: '#e2717f',
-    borderColor: '#e2717f'
+    backgroundColor: '#31D8A0',
+    borderColor: '#31D8A0',
+    marginTop: 10
   },
   buttonPrimaryText : {
     color: 'white'
@@ -81,7 +83,7 @@ module.exports = StyleSheet.create({
     marginBottom: 5,
     height: 40,
     borderBottomWidth: Platform.OS === 'ios' ? 1 : 0,
-    borderColor: Platform.OS === 'ios' ? '#999' : 'transparent'
+    borderColor: Platform.OS === 'ios' ? '#DDD' : 'transparent'
   },
   input: {
     position: 'absolute',
@@ -103,5 +105,5 @@ module.exports = StyleSheet.create({
 });
 
 module.exports.colors = {
-  accentColor: '#e2717f'
+  accentColor: '#31D8A0'
 };
