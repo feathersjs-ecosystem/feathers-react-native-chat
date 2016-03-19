@@ -35,15 +35,16 @@ export default class Login extends React.Component {
   }
 
   login() {
-    // if(!utils.validateUsername(this.state.username) || !utils.validatePassword(this.state.password)) {
-    //   Alert.alert('Error', 'Please enter a valid username or password.');
-    //   return;
-    // }
+    if (!utils.validateEmail(this.state.email) || !utils.validatePassword(this.state.password)) {
+      Alert.alert('Error', 'Please enter a valid email or password.');
+      return;
+    }
+
     this.setState({loading: true});
     
     this.app.authenticate({
       type: 'local',
-      username: this.state.username,
+      email: this.state.email,
       password: this.state.password
     }).then(response => {
       this.setState({ loading: false });
