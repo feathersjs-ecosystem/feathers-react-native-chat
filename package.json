@@ -1,6 +1,6 @@
 {
   "name": "feathersreactnativechat",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "push": "git push origin && git push origin --tags",
