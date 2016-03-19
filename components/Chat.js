@@ -14,6 +14,8 @@ import React, {
 var Icon = require('react-native-vector-icons/FontAwesome');
 var baseStyles = require('../baseStyles');
 
+const PLACEHOLDER = 'https://raw.githubusercontent.com/feathersjs/feathers-chat/master/public/placeholder.png';
+
 import GiftedMessenger from 'react-native-gifted-messenger'
 
 export default class Chat extends Component {
@@ -22,7 +24,6 @@ export default class Chat extends Component {
     this.app = this.props.app;
 
     this.state = {
-      online: true,
       messages: [],
       skip: 0,
       hasMoreMessages : false
@@ -30,31 +31,13 @@ export default class Chat extends Component {
 
     this.formatMessage = this.formatMessage.bind(this);
     this.loadMessages = this.loadMessages.bind(this);
-
+    this.deleteMessage = this.deleteMessage.bind(this);
   }
 
   componentDidMount(props) {
     var self = this;
 
-    if (this.props.events) {
-      this.props.events.addListener('socket:disconnect', () => {
-        console.log('socket:disconnect!');
-        self.setState({online: false});
-      });
-
-      this.props.events.addListener('socket:connect', () => {
-        console.log('socket:connect!');
-        var prevState = this.state.online;
-        self.setState({online: true});
-        if (!prevState)
-          this.loadMessages();
-      });
-    }
-
-    this.app.user().then(user => {
-      this.user = user;
-      this.loadMessages();
-    });
+    this.loadMessages();
 
     this.app.service('messages').on('created', message => {
       const messages = this.state.messages;
@@ -68,39 +51,33 @@ export default class Chat extends Component {
     });
   }
 
-  componentWillUnmount() {
-    this.props.events.removeAllListeners('socket:connect');
-    this.props.events.removeAllListeners('socket:disconnect');
-  }
-
-
   formatMessage(message) {
     return {
       id: message._id,
       name: message.sentBy.username,
       text: message.text,
-      position: message.sentBy._id === this.user._id ? 'left' : 'right',
-      image: {uri: message.sentBy.photoURL},
+      position: message.sentBy._id === this.app.get('user')._id ? 'left' : 'right',
+      image: {uri: message.sentBy.avatar ? message.sentBy.avatar : PLACEHOLDER },
       date: new Date(message.createdAt)
     };
   }
 
   deleteMessage(messageToRemove) {
-
+    console.log(messageToRemove);
     let messages = this.state.messages;
     let idToRemove = messageToRemove.id ? messageToRemove.id : messageToRemove._id;
+
+    console.log(idToRemove);
     messages = messages.filter(function (message) {
-      return message.id != idToRemove;
+      return message.id !== idToRemove;
     });
+
+    console.log(messageToRemove);
 
     this.setState({messages});
   }
 
   loadMessages(oldestMessage, callback) {
-    if (!this.state.online) {
-      return;
-    }
-
     const query = {query: {$sort: {updatedAt: -1}, $skip: this.state.skip}};
 
     return this.app.service('messages').find(query).then(response => {
@@ -112,9 +89,9 @@ export default class Chat extends Component {
       }
 
       // This was fired from the load earlier messages button
-      if(callback) {
-      this.setState({skip, hasMoreMessages: response.skip + response.limit < response.total});
-      callback(messages, false);
+      if (callback) {
+        this.setState({skip, hasMoreMessages: response.skip + response.limit < response.total});
+        callback(messages, false);
       } else {
         this.setState({messages, skip, hasMoreMessages: response.skip + response.limit < response.total});
       }
@@ -154,13 +131,6 @@ export default class Chat extends Component {
   }
 
   render() {
-    if (!this.state.online) {
-      return (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Icon name="warning" size={80} color={baseStyles.colors.accentColor}/>
-        <Text style={{marginTop: 30, fontWeight: '200', fontSize: 20}}>Please check your connection</Text>
-      </View>);
-    }
-
     return (
       <View style={{flex: 1, marginTop: Platform.OS === 'ios' ? 65 : 55}}>
         <GiftedMessenger
@@ -179,7 +149,7 @@ export default class Chat extends Component {
             marginRight: 70
           },
           bubbleRight: {
-            backgroundColor: '#e2717f',
+            backgroundColor: '#31D8A0',
             marginLeft: 70
           },
           listView: {

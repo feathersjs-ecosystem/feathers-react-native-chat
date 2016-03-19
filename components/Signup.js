@@ -14,13 +14,13 @@ export default class Signup extends React.Component {
     this.app = this.props.app;
 
     this.register = this.register.bind(this);
-    this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
 
     this.state = {
-      usernameBorder: 'transparent',
+      emailBorder: 'transparent',
       passwordBorder: 'transparent',
-      username: '',
+      email: '',
       password: '',
       loading: false
     }
@@ -30,15 +30,15 @@ export default class Signup extends React.Component {
     BackAndroid.addEventListener('hardwareBackPress', () => Actions.pop());
   }
 
-  onChangeUsername(text) {
-    this.setState({username: text});
-    if (!utils.validateUsername(text)) {
+  onChangeEmail(text) {
+    this.setState({email: text});
+    if (!utils.validateEmail(text)) {
       this.setState({
-        usernameBorder: '#FFC200'
+        emailBorder: '#FFC200'
       })
     } else {
       this.setState({
-        usernameBorder: 'transparent'
+        emailBorder: 'transparent'
       })
     }
   }
@@ -59,22 +59,22 @@ export default class Signup extends React.Component {
   register() {
     var self = this;
 
-    if(!utils.validateUsername(this.state.username) || !utils.validatePassword(this.state.password)) {
-      Alert.alert('Please enter a valid username or password.');
+    if(!utils.validateEmail(this.state.email) || !utils.validatePassword(this.state.password)) {
+      Alert.alert('Please enter a valid email or password.');
       return;
     }
 
     this.setState({loading: true});
 
     var userData = {
-      username: this.state.username,
+      email: this.state.email,
       password: this.state.password
     };
 
     this.app.service('users').create(userData).then((result) => {
       this.app.authenticate({
         type: 'local',
-        username: this.state.username,
+        email: this.state.email,
         password: this.state.password
       }).then(response => {
         this.setState({ loading: false });
@@ -82,7 +82,7 @@ export default class Signup extends React.Component {
         Actions.main();
       }).catch(error => {
         console.log(error);
-        Alert.alert('Error', 'Please enter a valid username or password.');
+        Alert.alert('Error', 'Please enter a valid email or password.');
         this.setState({ loading: false });
       });
     }).catch((err) => {
@@ -124,7 +124,7 @@ export default class Signup extends React.Component {
       <TouchableWithoutFeedback onPress={this._dismissKeyboard.bind(this)}>
         <View style={baseStyles.container}>
           <TouchableHighlight style={[baseStyles.backButtonContainer, {padding: 10}]} onPress={this._close.bind(this)} underlayColor="transparent">
-            <Icon name="close-round" size={30} color="#999" />
+            <Icon name="close-round" size={30} color="#333" />
           </TouchableHighlight>
           <Text style={baseStyles.welcomeText}>Create Account</Text>
 
@@ -132,25 +132,28 @@ export default class Signup extends React.Component {
             <View style={baseStyles.inputContainer}>
 
               <TextInput
-                style={[baseStyles.input, baseStyles.darkFont, {borderWidth: 1, borderColor: this.state.usernameBorder}]}
+                style={[baseStyles.input, baseStyles.darkFont, {borderWidth: 1, borderColor: this.state.emailBorder}]}
                 autoFocus={true}
-                placeholder="Username"
+                placeholder="Email"
                 placeholderTextColor="#AAA"
                 autoCorrect={false}
                 autoCapitalize='none'
-                value={this.state.username}
-                onChangeText={this.onChangeUsername}
+                keyBoardType='email-address'
+                returnKeyType='next'
+                value={this.state.email}
+                onChangeText={this.onChangeEmail}
               />
             </View>
             <View style={baseStyles.inputContainer}>
 
               <TextInput
-                password={true}
+                secureTextEntry={true}
                 style={[baseStyles.input, baseStyles.darkFont, {borderWidth: 1, borderColor: this.state.passwordBorder}]}
                 placeholder="Password"
                 placeholderTextColor="#AAA"
                 autoCorrect={false}
                 autoCapitalize='none'
+                returnKeyType='send'
                 value={this.state.password}
                 onChangeText={this.onChangePassword}
               />

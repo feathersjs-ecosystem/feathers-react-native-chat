@@ -1,9 +1,9 @@
 'use strict';
 
 module.exports = {
-  validateUsername(name) {
+  validateEmail(email) {
     //TODO: Add more robust validation
-    if (name.length > 0) {
+    if (email.length > 0) {
       return true;
     }
     return false;

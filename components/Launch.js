@@ -36,7 +36,7 @@ export default class Launch extends React.Component {
         left: 0,
         right: 0,
         bottom: 0,
-        height: 130
+        height: 140
       },
       topSection: {
         flexDirection: 'column',
@@ -57,15 +57,15 @@ export default class Launch extends React.Component {
     return (
       <View style={baseStyles.container}>
         <View style={this.styles.topSection}>
-          <Image source={{uri: 'https://camo.githubusercontent.com/3bd70abb39b3a3c35252e873685ce0d4dd15aab2/687474703a2f2f66656174686572736a732e636f6d2f696d616765732f66656174686572732d6c6f676f76322e706e67'}} style={{width:295, height: 50}}/>
+          <Image source={{uri: 'http://feathersjs.com/img/feathers-logo-wide.png'}} style={{width:295, height: 50}}/>
           <Text style={this.styles.tagLine}>CHAT DEMO</Text>
         </View>
         <View style={this.styles.bottomSection}>
-          <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonDefault]} onPress={Actions.login} underlayColor="#ddd">
+          <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonDefault]} onPress={Actions.login} underlayColor="#DDD">
             <Text style={[baseStyles.baseButtonText, baseStyles.buttonDefaultText]}>Login</Text>
           </TouchableHighlight>
 
-          <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary]} onPress={Actions.signup} underlayColor="#e2717f">
+          <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary]} onPress={Actions.signup} underlayColor="#31D8A0">
             <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>Create Account</Text>
           </TouchableHighlight>
 

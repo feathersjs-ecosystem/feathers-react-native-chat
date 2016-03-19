@@ -18,13 +18,13 @@ export default class Login extends React.Component {
     this.app = this.props.app;
 
     this.login = this.login.bind(this);
-    this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
 
     this.state = {
-      usernameBorder: 'transparent',
+      emailBorder: 'transparent',
       passwordBorder: 'transparent',
-      username: '',
+      email: '',
       password: '',
       loading: false
     }
@@ -52,21 +52,21 @@ export default class Login extends React.Component {
       Actions.main();
     }).catch(error => {
       console.log('ERROR', error);
-      Alert.alert('Error', 'Please enter a valid username or password.');
+      Alert.alert('Error', 'Please enter a valid email or password.');
       this.setState({ loading: false });
       return;
     });
   }
 
-  onChangeUsername(text) {
-    this.setState({username: text});
-    if (!utils.validateUsername(text)) {
+  onChangeEmail(text) {
+    this.setState({email: text});
+    if (!utils.validateEmail(text)) {
       this.setState({
-        usernameBorder: '#FFC200'
+        emailBorder: '#FFC200'
       })
     } else {
       this.setState({
-        usernameBorder: 'transparent'
+        emailBorder: 'transparent'
       })
     }
   }
@@ -116,7 +116,7 @@ export default class Login extends React.Component {
         <View style={baseStyles.container}>
           <TouchableHighlight onPress={this._close.bind(this)} underlayColor="transparent"
                               style={[baseStyles.backButtonContainer]}>
-            <Icon name="close-round" size={30} color="#999"/>
+            <Icon name="close-round" size={30} color="#333"/>
           </TouchableHighlight>
           <Text style={baseStyles.welcomeText}>WELCOME BACK</Text>
 
@@ -124,24 +124,27 @@ export default class Login extends React.Component {
             <View style={baseStyles.inputContainer}>
 
               <TextInput
-                style={[baseStyles.input, baseStyles.greyFont, {borderWidth: 1, borderColor: this.state.usernameBorder}]}
+                style={[baseStyles.input, baseStyles.greyFont, {borderWidth: 1, borderColor: this.state.emailBorder}]}
                 autoFocus={true}
-                placeholder="Username"
+                placeholder="Email"
                 placeholderTextColor="#AAA"
                 autoCorrect={false}
                 autoCapitalize='none'
-                value={this.state.username}
-                onChangeText={this.onChangeUsername}
+                keyBoardType='email-address'
+                returnKeyType='next'
+                value={this.state.email}
+                onChangeText={this.onChangeEmail}
               />
             </View>
             <View style={baseStyles.inputContainer}>
               <TextInput
-                password={true}
+                secureTextEntry={true}
                 style={[baseStyles.input, baseStyles.greyFont, {borderWidth: 1, borderColor: this.state.passwordBorder}]}
                 placeholder="Password"
                 placeholderTextColor="#AAA"
                 autoCorrect={false}
                 autoCapitalize='none'
+                returnKeyType='send'
                 value={this.state.password}
                 onChangeText={this.onChangePassword}
               />

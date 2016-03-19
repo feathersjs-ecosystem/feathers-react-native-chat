@@ -6,6 +6,7 @@ var baseStyles = require('../baseStyles');
 var Actions = require('react-native-router-flux').Actions;
 var Button = require('react-native-button');
 
+const PLACEHOLDER = 'https://raw.githubusercontent.com/feathersjs/feathers-chat/master/public/placeholder.png';
 
 export default class SideDrawer extends React.Component {
   constructor(props) {
@@ -23,31 +24,27 @@ export default class SideDrawer extends React.Component {
   }
 
   componentDidMount() {
-    this.app.user().then(user => {
-      // Find all online users that are not me
-      // TODO (EK): Maybe set a higher max limit
-      const query = {
-        query: {
-          online: true,
-          _id: { $nin: [user._id] },
-          $limit: 25
-        }
-      };
+    // Find all online users that are not me
+    // TODO (EK): Maybe set a higher max limit
+    const query = {
+      query: {
+        online: true,
+        _id: { $nin: [this.app.get('user')._id] },
+        $limit: 25
+      }
+    };
 
-      this.app.service('users')
-        .find(query)
-        .then(result => {
-          this.setState({
-            onlineUserCount: result.total,
-            users: result.data
-          });
-        })
-        .catch(error => {
-          console.log(error);
+    this.app.service('users')
+      .find(query)
+      .then(result => {
+        this.setState({
+          onlineUserCount: result.total,
+          users: result.data
         });
-    }).catch(error => {
-      console.log(error);
-    });
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   _pressRow(user, sectionID, rowID) {
@@ -58,11 +55,12 @@ export default class SideDrawer extends React.Component {
   }
 
   _signOut() {
-    this.app.logout().then(() => Actions.launch());
+    this.app.logout();
+    Actions.launch();
   }
 
   _renderDrawerContent() {
-    let onlinePhrase = 'No one\'s online';
+    let onlinePhrase = 'You\'re all alone :-(';
 
     if (this.state.onlineUserCount === 1) {
       onlinePhrase = `${this.state.onlineUserCount} person online`;
@@ -83,7 +81,7 @@ export default class SideDrawer extends React.Component {
 
           <TouchableHighlight onPress={() => this._pressRow(user, sectionID, rowID)}>
             <View style={styles.userContainer}>
-              <Image source={{uri: user.photoURL}} style={styles.avatar}/>
+              <Image source={{uri: user.avatar || PLACEHOLDER }} style={styles.avatar}/>
               <Text style={styles.username}>
                 {user.username}
               </Text>
