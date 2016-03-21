@@ -19,6 +19,7 @@ export class DataSource {
 
 describe('<SideDrawer />', () => {
   ListView.DataSource = DataSource;
+  //var stubListView = sinon.spy(ListView.DataSource, '');
 
   var mockFeathersApp;
   beforeEach((done) => {
@@ -37,7 +38,7 @@ describe('<SideDrawer />', () => {
       user: sinon.stub().resolves({})
     };
     done();
-    });
+  });
 
   afterEach((done) => {
     done();
@@ -49,7 +50,7 @@ describe('<SideDrawer />', () => {
 
   it('renders a list of users', () => {
     expect(false).to.equal(true);
-    });
+  });
 
   it('logs out', () => {
     const wrapper = mount(<SideDrawer app={mockFeathersApp}/>);

@@ -5,7 +5,12 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "mocha --require test/mocks --compilers js:babel-core/register --recursive test/specs/**/*.spec.js",
-    "watch:test": "nodemon -w test -e js,jsx -x npm test"
+    "watch:test": "nodemon -w test -e js,jsx -x npm test",
+    "test:integration": "npm run mocha-test test/integration",
+    "mocha-test": "mocha --recursive --compilers js:babel/register",
+    "compile:test": "TARGET=test node tasks/compile.js",
+    "compile:staging": "TARGET=staging node tasks/compile.js",
+    "install:staging": "PHONE=true TARGET=staging node tasks/compile.js"
   },
   "dependencies": {
     "events": "^1.1.0",
@@ -57,6 +62,7 @@
     "plugins": [
       "transform-object-rest-spread"
     ],
+    "ignore" : "/node_modules\/(?!react-native-router-flux)/",
     "sourceMaps": false
   }
 }
