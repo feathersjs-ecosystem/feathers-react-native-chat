@@ -57,10 +57,7 @@ export default class Application extends React.Component {
         Actions.main();
       }).catch(error => {
         this.setState({ loading: false });
-        // Because the login is a modal that you can close
-        // set the launch screen as the route you would dismiss to.
         Actions.launch();
-        Actions.login();
       });
     });
 
