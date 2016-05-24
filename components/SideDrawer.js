@@ -1,14 +1,13 @@
-var React = require('react-native');
-
-var { Text, View, Image, StyleSheet, ListView, TouchableHighlight, Platform} = React;
-var Drawer = require('react-native-drawer');
-var baseStyles = require('../baseStyles');
-var Actions = require('react-native-router-flux').Actions;
-var Button = require('react-native-button');
+import React, { Component } from 'react';
+import {View, Text, Image, StyleSheet, ListView, TouchableHighlight, Platform} from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import Drawer from 'react-native-drawer';
+import Button from 'react-native-button';
+import baseStyles from '../baseStyles';
 
 const PLACEHOLDER = 'https://raw.githubusercontent.com/feathersjs/feathers-chat/master/public/placeholder.png';
 
-export default class SideDrawer extends React.Component {
+export default class SideDrawer extends Component {
   constructor(props) {
     super(props);
     

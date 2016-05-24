@@ -1,12 +1,11 @@
 'use strict';
 
-var React = require('react-native');
-var Actions = require('react-native-router-flux').Actions;
-var {Navigator, Text, View, TouchableHighlight, Platform, AsyncStorage} = React;
-var {Router, Route, Schema} = require('react-native-router-flux');
-var Icon = require('react-native-vector-icons/Ionicons');
-var baseStyles = require('./baseStyles');
-
+import React from 'react';
+import { Actions } from 'react-native-router-flux';
+import { Router, Route, Schema } from 'react-native-router-flux';
+import { Navigator, Text, View, TouchableHighlight, Platform, AsyncStorage } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import baseStyles from './baseStyles';
 import Launch from './components/Launch';
 import Login from './components/Login';
 import Signup from './components/Signup';

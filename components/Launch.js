@@ -1,11 +1,9 @@
-var React = require('react-native');
-var {View, Text, StyleSheet, Image, TouchableHighlight} = React;
+import React, { Component } from 'react';
+import {View, Text, StyleSheet, Image, TouchableHighlight} from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import baseStyles from '../baseStyles';
 
-var Actions = require('react-native-router-flux').Actions;
-
-var baseStyles = require('../baseStyles');
-
-export default class Launch extends React.Component {
+export default class Launch extends Component {
 
   constructor(props) {
     super(props);

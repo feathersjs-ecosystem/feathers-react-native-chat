@@ -1,10 +1,10 @@
-var React = require('react-native');
-var { View, Text, BackAndroid } = React;
-var Actions = require('react-native-router-flux').Actions;
-var baseStyles = require('../baseStyles');
-var Icon = require('react-native-vector-icons/Ionicons');
+import React, { Component } from 'react';
+import {View, Text, BackAndroid} from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import baseStyles from '../baseStyles';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-export default class Offline extends React.Component {
+export default class Offline extends Component {
 
   constructor(props) {
     super(props);

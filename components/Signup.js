@@ -1,13 +1,11 @@
-var React = require('react-native');
+import React, { Component } from 'react';
+import { View, Text, TextInput, TouchableHighlight, TouchableWithoutFeedback, Alert, BackAndroid } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import Icon from 'react-native-vector-icons/Ionicons';
+import baseStyles from '../baseStyles';
+import utils from '../utils';
 
-var Actions = require('react-native-router-flux').Actions;
-var { View, Text, TextInput, TouchableHighlight, Alert, BackAndroid } = React;
-var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
-var baseStyles = require('../baseStyles');
-var utils = require('../utils');
-var Icon = require('react-native-vector-icons/Ionicons');
-
-export default class Signup extends React.Component {
+export default class Signup extends Component {
 
   constructor(props) {
     super(props);

@@ -1,7 +1,6 @@
 'use strict';
-import React, {
-  AppRegistry,
-  Component,
+import React, { Component } from 'react';
+import {
   Dimensions,
   StyleSheet,
   Text,
@@ -11,12 +10,11 @@ import React, {
   Alert
 } from 'react-native';
 
-var Icon = require('react-native-vector-icons/FontAwesome');
-var baseStyles = require('../baseStyles');
+import Icon from 'react-native-vector-icons/FontAwesome';
+import GiftedMessenger from 'react-native-gifted-messenger'
+import baseStyles from '../baseStyles';
 
 const PLACEHOLDER = 'https://raw.githubusercontent.com/feathersjs/feathers-chat/master/public/placeholder.png';
-
-import GiftedMessenger from 'react-native-gifted-messenger'
 
 export default class Chat extends Component {
   constructor(props) {

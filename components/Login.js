@@ -1,17 +1,13 @@
 'use strict';
 
-var React = require('react-native');
-var {View, Text, TextInput, TouchableHighlight, Alert, BackAndroid} = React;
-var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
-var Actions = require('react-native-router-flux').Actions;
-var baseStyles = require('../baseStyles');
-var Icon = require('react-native-vector-icons/Ionicons');
-var utils = require('../utils');
+import React, { Component } from 'react';
+import {View, Text, TextInput, TouchableHighlight, TouchableWithoutFeedback, Alert, BackAndroid} from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import baseStyles from '../baseStyles';
+import Icon from 'react-native-vector-icons/Ionicons';
+import utils from '../utils';
 
-//import Spinner from "../Spinner"
-//import Alert from "../../../alert"
-
-export default class Login extends React.Component {
+export default class Login extends Component {
 
   constructor(props) {
     super(props);
