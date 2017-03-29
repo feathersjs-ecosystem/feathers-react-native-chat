@@ -1,37 +1,55 @@
 'use strict';
 
-var React = require('react-native');
-var {View, Text, TextInput, TouchableHighlight, Alert, BackAndroid} = React;
-var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
-var Actions = require('react-native-router-flux').Actions;
-var baseStyles = require('../baseStyles');
-var Icon = require('react-native-vector-icons/Ionicons');
-var utils = require('../utils');
+import React, {Component} from 'react';
+import {
+  Alert,
+  BackAndroid,
+  Image,
+  Keyboard,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  TouchableHighlight,
+  TouchableWithoutFeedback
+} from 'react-native';
 
-//import Spinner from "../Spinner"
-//import Alert from "../../../alert"
+import {time, autobind} from 'core-decorators';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {Button} from 'react-native-elements';
 
-export default class Login extends React.Component {
+const baseStyles = require('../baseStyles');
+const utils = require('../utils');
+
+@autobind
+export default class Login extends Component {
+  static navigationOptions = {
+    title: 'LOGIN',
+    header: ({goBack}) => {
+      const left = (<Icon name='ios-close' style={baseStyles.closeIcon} onPress={() => goBack()}/>);
+      return {
+        left
+      };
+    }
+  };
 
   constructor(props) {
     super(props);
-    this.app = this.props.app;
 
-    this.login = this.login.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
+    this.store = this.props.screenProps.store;
 
     this.state = {
       emailBorder: 'transparent',
       passwordBorder: 'transparent',
-      email: '',
-      password: '',
+      email: 'cory.m.smith@gmail.com',
+      password: '1234',
       loading: false
     }
   }
 
   componentDidMount() {
-    BackAndroid.addEventListener('hardwareBackPress', () => Actions.pop());
+    //BackAndroid.addEventListener('hardwareBackPress', () => Actions.pop());
   }
 
   login() {
@@ -41,19 +59,23 @@ export default class Login extends React.Component {
     }
 
     this.setState({loading: true});
-    
-    this.app.authenticate({
-      type: 'local',
+
+    this.store.authenticate({
+      strategy: 'local',
       email: this.state.email,
       password: this.state.password
     }).then(response => {
-      this.setState({ loading: false });
+      console.log('LOGIN', 'success authenticating', response);
+      // console.log('authenticated!');
+      // console.log(response);
+      this.setState({loading: false});
       // re-route to chat app
-      Actions.main();
+      // Actions.main();
+      this.props.navigation.navigate('Chat');
     }).catch(error => {
-      console.log('ERROR', error);
+      console.log('LOGIN', 'ERROR', JSON.stringify(error), error.message);
       Alert.alert('Error', 'Please enter a valid email or password.');
-      this.setState({ loading: false });
+      this.setState({loading: false});
       return;
     });
   }
@@ -84,45 +106,30 @@ export default class Login extends React.Component {
     }
   }
 
-  _close() {
-    this._dismissKeyboard();
-    Actions.pop();
-  }
+  // _close() {
+  //   this._dismissKeyboard();
+  //   // Actions.pop();
+  // }
 
-  _dismissKeyboard(el) {
-    TextInput.State.blurTextInput(TextInput.State.currentlyFocusedField())
-  }
+  // _dismissKeyboard(el) {
+  //   Key
+  // }
 
-  renderLoginButton() {
-    if (this.state.loading) {
+ render() {
+
+    if(this.state.loading) {
       return (
-        <View style={{alignItems: 'center'}}>
-          <Text>Logging in...</Text>
+        <View style={{alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'white'}}>
+          <Text>Signing in...</Text>
         </View>
       );
     }
+    
     return (
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary, {padding: 10}]} onPress={this.login} underlayColor="transparent">
-          <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>Login</Text>
-        </TouchableHighlight>
-      </View>
-    );
-  }
-
-  render() {
-    return (
-      <TouchableWithoutFeedback onPress={this._dismissKeyboard.bind(this)}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={baseStyles.container}>
-          <TouchableHighlight onPress={this._close.bind(this)} underlayColor="transparent"
-                              style={[baseStyles.backButtonContainer]}>
-            <Icon name="close-round" size={30} color="#333"/>
-          </TouchableHighlight>
-          <Text style={baseStyles.welcomeText}>WELCOME BACK</Text>
-
           <View style={baseStyles.inputs}>
             <View style={baseStyles.inputContainer}>
-
               <TextInput
                 style={[baseStyles.input, baseStyles.greyFont, {borderWidth: 1, borderColor: this.state.emailBorder}]}
                 autoFocus={true}
@@ -149,7 +156,12 @@ export default class Login extends React.Component {
                 onChangeText={this.onChangePassword}
               />
             </View>
-            {this.renderLoginButton()}
+            <View style={{height: 60}}>
+              <Button title='Login'
+                      onPress={this.login}
+                      backgroundColor='#31D8A0'
+                      buttonStyle={{marginTop: 10, borderRadius: 5}}/>
+            </View>
           </View>
         </View>
       </TouchableWithoutFeedback>

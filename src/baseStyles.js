@@ -6,9 +6,14 @@ module.exports = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     flex: 1,
-    alignItems: 'center'
+    // alignItems: 'center'
   },
 
+  closeIcon: {
+    marginLeft: 10,
+    fontSize: 44,
+    color: '#555'
+  },
   backButton: {
     width: 50,
     height: 50,
@@ -52,20 +57,20 @@ module.exports = StyleSheet.create({
     fontFamily: 'HelveticaNeue-Thin'
   },
 
-  buttonDefault : {
+  buttonDefault: {
     backgroundColor: '#DDD',
     borderColor: '#DDD'
   },
-  buttonDefaultText : {
+  buttonDefaultText: {
     color: 'white'
   },
 
-  buttonPrimary : {
+  buttonPrimary: {
     backgroundColor: '#31D8A0',
     borderColor: '#31D8A0',
     marginTop: 10
   },
-  buttonPrimaryText : {
+  buttonPrimaryText: {
     color: 'white'
   },
 
@@ -74,7 +79,7 @@ module.exports = StyleSheet.create({
     marginBottom: 10,
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center',
+    // alignItems: 'center',
     paddingLeft: 5
   },
   inputContainer: {

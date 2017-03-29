@@ -2,5 +2,5 @@
 
 import React, { AppRegistry } from 'react-native';
 
-import Application from './Application';
-AppRegistry.registerComponent('feathersreactnativechat', () => Application);
+import Application from './src/Application';
+AppRegistry.registerComponent('FeathersReactNativeChat', () => Application);

@@ -1,17 +1,39 @@
-var React = require('react-native');
+import React, {Component} from 'react';
+import {
+  Alert,
+  AsyncStorage,
+  BackAndroid,
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  TouchableHighlight,
+  TouchableWithoutFeedback
+} from 'react-native';
 
-var Actions = require('react-native-router-flux').Actions;
-var { View, Text, TextInput, TouchableHighlight, Alert, BackAndroid } = React;
-var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
-var baseStyles = require('../baseStyles');
-var utils = require('../utils');
-var Icon = require('react-native-vector-icons/Ionicons');
+
+import Icon from 'react-native-vector-icons/Ionicons';
+import {Button} from 'react-native-elements';
+
+const baseStyles = require('../baseStyles');
+const utils = require('../utils');
 
 export default class Signup extends React.Component {
+  static navigationOptions = {
+    title: 'CREATE ACCOUNT',
+    header: ({goBack}) => {
+      const left = (<Icon name='ios-close' style={baseStyles.closeIcon} onPress={() => goBack()}/>);
+      return {
+        left
+      };
+    }
+  };
 
   constructor(props) {
     super(props);
-    this.app = this.props.app;
+    this.store = this.props.screenProps.store;
 
     this.register = this.register.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
@@ -27,7 +49,7 @@ export default class Signup extends React.Component {
   }
 
   componentDidMount() {
-    BackAndroid.addEventListener('hardwareBackPress', () => Actions.pop());
+    //BackAndroid.addEventListener('hardwareBackPress', () => Actions.pop());
   }
 
   onChangeEmail(text) {
@@ -59,44 +81,30 @@ export default class Signup extends React.Component {
   register() {
     var self = this;
 
-    if(!utils.validateEmail(this.state.email) || !utils.validatePassword(this.state.password)) {
+    if (!utils.validateEmail(this.state.email) || !utils.validatePassword(this.state.password)) {
       Alert.alert('Please enter a valid email or password.');
       return;
     }
 
     this.setState({loading: true});
 
-    var userData = {
-      email: this.state.email,
-      password: this.state.password
-    };
-
-    this.app.service('users').create(userData).then((result) => {
-      this.app.authenticate({
-        type: 'local',
-        email: this.state.email,
-        password: this.state.password
-      }).then(response => {
-        this.setState({ loading: false });
-        // re-route to main authorized chat   component
-        Actions.main();
-      }).catch(error => {
-        console.log(error);
-        Alert.alert('Error', 'Please enter a valid email or password.');
-        this.setState({ loading: false });
-      });
-    }).catch((err) => {
-      console.log('err');
-      console.log(err);
-      self.setState({loading: false});
-      Alert.alert('Error', err.message);
+    this.store.createAccount(this.state.email, this.state.password).then((result) => {
+      console.log('created account');
+      this.setState({loading: false});
+      // re-route to main authorized chat   component
+      // Actions.main();
+      this.props.navigation.navigate('Chat');
+    }).catch(error => {
+      console.log(error);
+      Alert.alert('Error', 'Please enter a valid email or password.');
+      this.setState({loading: false});
     });
   }
 
-  _close() {
-    this._dismissKeyboard();
-    Actions.pop();
-  }
+  // _close() {
+  //   this._dismissKeyboard();
+  //   Actions.pop();
+  // }
 
   _dismissKeyboard(el) {
     TextInput.State.blurTextInput(TextInput.State.currentlyFocusedField())
@@ -112,7 +120,8 @@ export default class Signup extends React.Component {
     }
     return (
       <View style={{justifyContent: 'center', alignItems: 'center', height: 50, flexDirection: 'column'}}>
-        <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary]} onPress={this.register} underlayColor="transparent">
+        <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary]} onPress={this.register}
+                            underlayColor="transparent">
           <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>Create Account</Text>
         </TouchableHighlight>
       </View>
@@ -123,11 +132,6 @@ export default class Signup extends React.Component {
     return (
       <TouchableWithoutFeedback onPress={this._dismissKeyboard.bind(this)}>
         <View style={baseStyles.container}>
-          <TouchableHighlight style={[baseStyles.backButtonContainer, {padding: 10}]} onPress={this._close.bind(this)} underlayColor="transparent">
-            <Icon name="close-round" size={30} color="#333" />
-          </TouchableHighlight>
-          <Text style={baseStyles.welcomeText}>Create Account</Text>
-
           <View style={baseStyles.inputs}>
             <View style={baseStyles.inputContainer}>
 
@@ -158,7 +162,12 @@ export default class Signup extends React.Component {
                 onChangeText={this.onChangePassword}
               />
             </View>
-            {this.renderButton()}
+            <View style={{height: 60}}>
+              <Button title='Create Account Now'
+                      onPress={this.register}
+                      backgroundColor='#31D8A0'
+                      buttonStyle={{marginTop: 10, borderRadius: 5}}/>
+            </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
