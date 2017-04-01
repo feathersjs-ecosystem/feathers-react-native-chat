@@ -7,6 +7,7 @@ import hooks from 'feathers-hooks';
 import socketio from 'feathers-socketio/client'
 import authentication from 'feathers-authentication-client';
 const PLACEHOLDER = 'https://raw.githubusercontent.com/feathersjs/feathers-chat/master/public/placeholder.png';
+const API_URL = 'http://localhost:3030';
 
 @autobind
 export default class Store {
@@ -61,7 +62,7 @@ export default class Store {
 
   constructor() {
     const options = {transports: ['websocket'], forceNew: true, pingTimeout: 3000, pingInterval: 5000};
-    const socket = io('http://localhost:3030', options);
+    const socket = io(API_URL, options);
 
     this.app = feathers()
       .configure(socketio(socket))
