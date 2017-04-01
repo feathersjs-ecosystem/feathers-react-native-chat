@@ -1,14 +1,11 @@
 'use strict';
 import React, {Component} from 'react';
 import {
-  AppRegistry,
   Dimensions,
   StyleSheet,
   Text,
   View,
   Platform,
-  TouchableHighlight,
-  Alert
 } from 'react-native';
 
 import {time, autobind} from 'core-decorators';
@@ -26,73 +23,64 @@ export default class Chat extends Component {
       gesturesEnabled: false
     },
     header: ({navigate}) => {
-      const right = (<Icon name='ios-settings'
+      return {
+        right: (<Icon name='ios-settings'
                            size={28}
                            color='#aaa'
                            style={{marginRight: 10}}
-                           onPress={() => {navigate('Settings');}}/>);
-      return {
-        left: null,
-        right,
-        // ...NAV_STYLES,
+                      onPress={() => {
+                        navigate('Settings');
+                      }}/>)
       };
     },
   };
 
-  constructor(props) {
-    super(props);
-    this.store = this.props.screenProps.store;
-  }
-
   componentDidMount() {
-    this.store.loadMessages();
+    this.props.screenProps.store.loadMessages();
   }
 
   @time
   render() {
-    const messages = this.store.messages.slice();
 
     return (
       <View style={styles.container}>
-        <GiftedChat
+        {this.props.screenProps.store.messages.length > 0 && <GiftedChat
           ref={(c) => this._GiftedMessenger = c}
-          messages={messages}
-          onSend={this.store.sendMessage}
-          //onMessageLongPress={this.promptToDeleteMessage.bind(this)}
-          //onLoadEarlierMessages={this.loadMessages}
-          //loadEarlierMessagesButton={this.state.hasMoreMessages}
+          user={{_id: this.props.screenProps.store.user._id}}
+          messages={this.props.screenProps.store.messages.slice()}
+          onSend={this.props.screenProps.store.sendMessage}
+          loadEarlier={this.props.screenProps.store.hasMoreMessages}
+          onLoadEarlier={this.props.screenProps.store.loadMessages.bind(this, true)}
           keyboardDismissMode="on-drag"
           autoFocus={false}
           maxHeight={maxHeight}
-          styles={chatStyles}
-        />
-        {this.store.isLoadingMessages && <View style={{alignItems: 'center', ...StyleSheet.absoluteFillObject, backgroundColor: 'red'}}>
-          <Text>Loading ...</Text>
+        />}
+        {this.props.screenProps.store.isConnecting && <View style={styles.banner}>
+          <Text style={styles.bannerText}>Reconnecting ...</Text>
         </View>}
       </View>);
   }
 }
 
-const chatStyles = {
-  // bubbleLeft: {
-  //   backgroundColor: '#999',
-  //   marginRight: 70
-  // },
-  // bubbleRight: {
-  //   backgroundColor: '#31D8A0',
-  //   marginLeft: 70
-  // },
-  // listView: {
-  //   paddingTop: 5
-  // }
-};
-
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#ccc'
-    // flex: 1,
-    // marginTop: Platform.OS === 'ios' ? 65 : 55
+    backgroundColor: 'white'
+  },
+  banner : {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    padding: 5,
+    backgroundColor: '#E98B50',
+    opacity: 0.8
+  },
+  bannerText: {
+    color: 'white',
+    fontWeight: '400',
+    fontSize: 13,
+    textAlign: 'center'
   },
   settings: {
     marginRight: 10

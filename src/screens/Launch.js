@@ -36,9 +36,10 @@ export default class Launch extends Component {
       <View style={styles.container}>
         <View style={styles.topSection}>
           <Image source={require('../../images/feathers_logo_wide.png')} style={styles.logo}/>
+          <Text style={styles.tagline}>Chat Demo</Text>
         </View>
         <View style={styles.bottomSection}>
-          <Button title='Login'
+          <Button title='Sign In'
                   onPress={this._showLogin}
                   backgroundColor='#BBB'
                   buttonStyle={{borderRadius: 5}}/>
@@ -59,14 +60,14 @@ const styles = StyleSheet.create({
   },
   logo: {
     resizeMode: 'contain',
-    width: 240,
-    height: 50
+    width: 280,
+    height: 80
   },
-  tagLine: {
-    marginTop: 40,
-    fontSize: 20,
+  tagline: {
+    marginTop: 5,
+    fontSize: 28,
     fontWeight: "200",
-    color: '#333'
+    color: '#999'
   },
   bottomSection: {
     position: 'absolute',

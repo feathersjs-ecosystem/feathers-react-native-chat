@@ -4,14 +4,11 @@ import React, {Component} from 'react';
 import {
   Alert,
   BackAndroid,
-  Image,
   Keyboard,
-  Platform,
   StyleSheet,
   Text,
   TextInput,
   View,
-  TouchableHighlight,
   TouchableWithoutFeedback
 } from 'react-native';
 
@@ -25,7 +22,7 @@ const utils = require('../utils');
 @autobind
 export default class Login extends Component {
   static navigationOptions = {
-    title: 'LOGIN',
+    title: 'Sign In',
     header: ({goBack}) => {
       const left = (<Icon name='ios-close' style={baseStyles.closeIcon} onPress={() => goBack()}/>);
       return {
@@ -49,6 +46,7 @@ export default class Login extends Component {
   }
 
   componentDidMount() {
+    //TODO: Get back button working on Android
     //BackAndroid.addEventListener('hardwareBackPress', () => Actions.pop());
   }
 
@@ -59,24 +57,10 @@ export default class Login extends Component {
     }
 
     this.setState({loading: true});
-
-    this.store.authenticate({
-      strategy: 'local',
-      email: this.state.email,
-      password: this.state.password
-    }).then(response => {
-      console.log('LOGIN', 'success authenticating', response);
-      // console.log('authenticated!');
-      // console.log(response);
+    this.store.login(this.state.email, this.state.password).catch(error => {
       this.setState({loading: false});
-      // re-route to chat app
-      // Actions.main();
-      this.props.navigation.navigate('Chat');
-    }).catch(error => {
       console.log('LOGIN', 'ERROR', JSON.stringify(error), error.message);
-      Alert.alert('Error', 'Please enter a valid email or password.');
-      this.setState({loading: false});
-      return;
+      Alert.alert('Error', 'Login failed, please check your login/password.');
     });
   }
 
@@ -106,21 +90,12 @@ export default class Login extends Component {
     }
   }
 
-  // _close() {
-  //   this._dismissKeyboard();
-  //   // Actions.pop();
-  // }
-
-  // _dismissKeyboard(el) {
-  //   Key
-  // }
-
  render() {
 
     if(this.state.loading) {
       return (
         <View style={{alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'white'}}>
-          <Text>Signing in...</Text>
+          <Text style={{fontSize: 16}}>Signing in...</Text>
         </View>
       );
     }

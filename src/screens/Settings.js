@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {
+  Alert,
   Image,
   StyleSheet,
   Text,
@@ -32,19 +33,29 @@ export default class Settings extends Component {
     }
   };
 
-  _signOut() {
+  _showSignoutPrompt() {
+    Alert.alert('Sign Out', 'Are you sure you want to sign out?',
+      [
+        {text: 'Cancel', onPress: () => {}, style: 'cancel'},
+        {text: 'Yes', onPress: this._signout, style: 'destructive'},
+      ]
+    );
+  }
+
+  _signout() {
     const resetAction = NavigationActions.reset({
       index: 0,
       actions: [
         NavigationActions.navigate({ routeName: 'Launch'})
       ]
     });
-    this.props.navigation.dispatch(resetAction);
+    // this.props.navigation.dispatch(resetAction);
     this.props.screenProps.store.logout();
   }
 
   render() {
     const user = this.props.screenProps.store.user;
+    console.log(this.props.screenProps.store.user);
 
     if(!user) {
       return null;
@@ -58,9 +69,10 @@ export default class Settings extends Component {
         </View>
         <View style={styles.bottomSection}>
           <Button title='Sign Out'
-                  onPress={this._signOut}
-                  backgroundColor='#BBB'
-                  buttonStyle={{borderRadius: 5}}/>
+                  onPress={this._showSignoutPrompt}
+                  backgroundColor='#777'
+                  color={'white'}
+                  buttonStyle={{borderRadius: 5, borderWidth: 0, borderColor: '#777'}}/>
         </View>
       </View>
     );
@@ -87,8 +99,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 0,
-    height: 140,
+    bottom: 15,
   },
   topSection: {
     flex: 1,

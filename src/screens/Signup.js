@@ -1,25 +1,23 @@
 import React, {Component} from 'react';
 import {
   Alert,
-  AsyncStorage,
   BackAndroid,
-  Image,
-  Platform,
   StyleSheet,
-  Text,
+  Keyboard,
   TextInput,
   View,
-  TouchableHighlight,
   TouchableWithoutFeedback
 } from 'react-native';
 
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Button} from 'react-native-elements';
+import {time, autobind} from 'core-decorators';
 
 const baseStyles = require('../baseStyles');
 const utils = require('../utils');
 
+@autobind
 export default class Signup extends React.Component {
   static navigationOptions = {
     title: 'CREATE ACCOUNT',
@@ -35,10 +33,6 @@ export default class Signup extends React.Component {
     super(props);
     this.store = this.props.screenProps.store;
 
-    this.register = this.register.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
-
     this.state = {
       emailBorder: 'transparent',
       passwordBorder: 'transparent',
@@ -49,6 +43,7 @@ export default class Signup extends React.Component {
   }
 
   componentDidMount() {
+    //TODO: Back button on Android
     //BackAndroid.addEventListener('hardwareBackPress', () => Actions.pop());
   }
 
@@ -79,58 +74,22 @@ export default class Signup extends React.Component {
   }
 
   register() {
-    var self = this;
-
     if (!utils.validateEmail(this.state.email) || !utils.validatePassword(this.state.password)) {
       Alert.alert('Please enter a valid email or password.');
       return;
     }
 
     this.setState({loading: true});
-
-    this.store.createAccount(this.state.email, this.state.password).then((result) => {
-      console.log('created account');
-      this.setState({loading: false});
-      // re-route to main authorized chat   component
-      // Actions.main();
-      this.props.navigation.navigate('Chat');
-    }).catch(error => {
+    this.store.createAccount(this.state.email, this.state.password).catch(error => {
       console.log(error);
       Alert.alert('Error', 'Please enter a valid email or password.');
       this.setState({loading: false});
     });
   }
 
-  // _close() {
-  //   this._dismissKeyboard();
-  //   Actions.pop();
-  // }
-
-  _dismissKeyboard(el) {
-    TextInput.State.blurTextInput(TextInput.State.currentlyFocusedField())
-  }
-
-  renderButton() {
-    if (this.state.loading) {
-      return (
-        <View style={{alignItems: 'center'}}>
-          <Text>Creating account...</Text>
-        </View>
-      );
-    }
-    return (
-      <View style={{justifyContent: 'center', alignItems: 'center', height: 50, flexDirection: 'column'}}>
-        <TouchableHighlight style={[baseStyles.baseButton, baseStyles.buttonPrimary]} onPress={this.register}
-                            underlayColor="transparent">
-          <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>Create Account</Text>
-        </TouchableHighlight>
-      </View>
-    )
-  }
-
   render() {
     return (
-      <TouchableWithoutFeedback onPress={this._dismissKeyboard.bind(this)}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={baseStyles.container}>
           <View style={baseStyles.inputs}>
             <View style={baseStyles.inputContainer}>
