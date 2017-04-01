@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {
-  Text,
   View
 } from 'react-native';
 import {autobind} from 'core-decorators';
@@ -10,7 +9,7 @@ import {StackNavigator} from 'react-navigation';
 
 import {Launch, Login, Signup, Chat, Settings} from './screens'
 
-import Store from './store';
+import Store from './Store';
 
 const UnauthenticatedNavigator = StackNavigator({
   Launch: {screen: Launch},

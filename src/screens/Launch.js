@@ -17,12 +17,6 @@ export default class Launch extends Component {
     }
   };
 
-  constructor(props) {
-    super(props);
-    this._showLogin = this._showLogin.bind(this);
-    this._showSignup = this._showSignup.bind(this);
-  }
-
   _showLogin() {
     this.props.navigation.navigate('Login');
   }
@@ -66,7 +60,7 @@ const styles = StyleSheet.create({
   tagline: {
     marginTop: 5,
     fontSize: 28,
-    fontWeight: "200",
+    fontWeight: '200',
     color: '#999'
   },
   bottomSection: {

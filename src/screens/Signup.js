@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {
   Alert,
   BackAndroid,
-  StyleSheet,
   Keyboard,
   TextInput,
   View,
@@ -10,21 +9,19 @@ import {
 } from 'react-native';
 
 
-import Icon from 'react-native-vector-icons/Ionicons';
 import {Button} from 'react-native-elements';
-import {time, autobind} from 'core-decorators';
-
+import {autobind} from 'core-decorators';
+import NavIcons from '../NavIcons';
 const baseStyles = require('../baseStyles');
-const utils = require('../utils');
+import Utils from '../Utils';
 
 @autobind
 export default class Signup extends React.Component {
   static navigationOptions = {
-    title: 'CREATE ACCOUNT',
+    title: 'Create Account',
     header: ({goBack}) => {
-      const left = (<Icon name='ios-close' style={baseStyles.closeIcon} onPress={() => goBack()}/>);
       return {
-        left
+        left: NavIcons.closeButton(goBack)
       };
     }
   };
@@ -34,8 +31,6 @@ export default class Signup extends React.Component {
     this.store = this.props.screenProps.store;
 
     this.state = {
-      emailBorder: 'transparent',
-      passwordBorder: 'transparent',
       email: '',
       password: '',
       loading: false
@@ -49,32 +44,14 @@ export default class Signup extends React.Component {
 
   onChangeEmail(text) {
     this.setState({email: text});
-    if (!utils.validateEmail(text)) {
-      this.setState({
-        emailBorder: '#FFC200'
-      })
-    } else {
-      this.setState({
-        emailBorder: 'transparent'
-      })
-    }
   }
 
   onChangePassword(text) {
     this.setState({password: text});
-    if (!utils.validatePassword(text)) {
-      this.setState({
-        passwordBorder: '#FFC200'
-      })
-    } else {
-      this.setState({
-        passwordBorder: 'transparent'
-      })
-    }
   }
 
   register() {
-    if (!utils.validateEmail(this.state.email) || !utils.validatePassword(this.state.password)) {
+    if (!Utils.validateEmail(this.state.email) || !Utils.validatePassword(this.state.password)) {
       Alert.alert('Please enter a valid email or password.');
       return;
     }
@@ -95,10 +72,10 @@ export default class Signup extends React.Component {
             <View style={baseStyles.inputContainer}>
 
               <TextInput
-                style={[baseStyles.input, baseStyles.darkFont, {borderWidth: 1, borderColor: this.state.emailBorder}]}
+                style={[baseStyles.input, baseStyles.darkFont]}
                 autoFocus={true}
-                placeholder="Email"
-                placeholderTextColor="#AAA"
+                placeholder='Email'
+                placeholderTextColor='#AAA'
                 autoCorrect={false}
                 autoCapitalize='none'
                 keyBoardType='email-address'
@@ -108,12 +85,11 @@ export default class Signup extends React.Component {
               />
             </View>
             <View style={baseStyles.inputContainer}>
-
               <TextInput
                 secureTextEntry={true}
-                style={[baseStyles.input, baseStyles.darkFont, {borderWidth: 1, borderColor: this.state.passwordBorder}]}
-                placeholder="Password"
-                placeholderTextColor="#AAA"
+                style={[baseStyles.input, baseStyles.darkFont]}
+                placeholder='Password'
+                placeholderTextColor='#AAA'
                 autoCorrect={false}
                 autoCapitalize='none'
                 returnKeyType='send'

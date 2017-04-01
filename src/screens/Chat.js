@@ -5,32 +5,27 @@ import {
   StyleSheet,
   Text,
   View,
-  Platform,
+  Platform
 } from 'react-native';
 
 import {time, autobind} from 'core-decorators';
 import {action, observable} from 'mobx';
 import {observer} from 'mobx-react/native';
 import {GiftedChat} from 'react-native-gifted-chat';
-import Icon from 'react-native-vector-icons/Ionicons';
+import NavIcons from '../NavIcons';
 
 const maxHeight = Platform.OS === 'ios' ? Dimensions.get('window').height - 65 : Dimensions.get('window').height - 85;
 
 @observer @autobind
 export default class Chat extends Component {
   static navigationOptions = {
+    title: '#feathersjs',
     cardStack: {
       gesturesEnabled: false
     },
     header: ({navigate}) => {
       return {
-        right: (<Icon name='ios-settings'
-                           size={28}
-                           color='#aaa'
-                           style={{marginRight: 10}}
-                      onPress={() => {
-                        navigate('Settings');
-                      }}/>)
+        right: NavIcons.settingsButton(navigate)
       };
     },
   };
@@ -41,7 +36,6 @@ export default class Chat extends Component {
 
   @time
   render() {
-
     return (
       <View style={styles.container}>
         {this.props.screenProps.store.messages.length > 0 && <GiftedChat
@@ -51,7 +45,7 @@ export default class Chat extends Component {
           onSend={this.props.screenProps.store.sendMessage}
           loadEarlier={this.props.screenProps.store.hasMoreMessages}
           onLoadEarlier={this.props.screenProps.store.loadMessages.bind(this, true)}
-          keyboardDismissMode="on-drag"
+          keyboardDismissMode='on-drag'
           autoFocus={false}
           maxHeight={maxHeight}
         />}
@@ -67,7 +61,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'white'
   },
-  banner : {
+  banner: {
     position: 'absolute',
     top: 0,
     left: 0,

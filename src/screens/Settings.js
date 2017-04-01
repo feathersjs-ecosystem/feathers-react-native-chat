@@ -4,58 +4,31 @@ import {
   Image,
   StyleSheet,
   Text,
-  View,
-  TouchableHighlight
+  View
 } from 'react-native';
 
-import {time, autobind} from 'core-decorators';
-import {action, observable} from 'mobx';
+import {autobind} from 'core-decorators';
 import {observer} from 'mobx-react/native';
 import {Button} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/Ionicons';
+import NavIcons from '../NavIcons';
 
 const baseStyles = require('../baseStyles');
 
 import { NavigationActions } from 'react-navigation'
 
-
-
-
 @autobind @observer
 export default class Settings extends Component {
   static navigationOptions = {
-    title: 'SETTINGS',
+    title: 'Settings',
     header: ({goBack}) => {
-      const left = (<Icon name='ios-close' style={baseStyles.closeIcon} onPress={() => goBack()}/>);
       return {
-        left
-      };
+        left : NavIcons.closeButton(goBack)
+      }
     }
   };
 
-  _showSignoutPrompt() {
-    Alert.alert('Sign Out', 'Are you sure you want to sign out?',
-      [
-        {text: 'Cancel', onPress: () => {}, style: 'cancel'},
-        {text: 'Yes', onPress: this._signout, style: 'destructive'},
-      ]
-    );
-  }
-
-  _signout() {
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      actions: [
-        NavigationActions.navigate({ routeName: 'Launch'})
-      ]
-    });
-    // this.props.navigation.dispatch(resetAction);
-    this.props.screenProps.store.logout();
-  }
-
   render() {
     const user = this.props.screenProps.store.user;
-    console.log(this.props.screenProps.store.user);
 
     if(!user) {
       return null;
@@ -69,10 +42,10 @@ export default class Settings extends Component {
         </View>
         <View style={styles.bottomSection}>
           <Button title='Sign Out'
-                  onPress={this._showSignoutPrompt}
+                  onPress={this.props.screenProps.store.promptForLogout}
                   backgroundColor='#777'
                   color={'white'}
-                  buttonStyle={{borderRadius: 5, borderWidth: 0, borderColor: '#777'}}/>
+                  buttonStyle={styles.signoutButton}/>
         </View>
       </View>
     );
@@ -100,6 +73,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 15,
+  },
+  signoutButton: {
+    borderRadius: 5,
+    borderWidth: 0,
+    borderColor: '#777'
   },
   topSection: {
     flex: 1,

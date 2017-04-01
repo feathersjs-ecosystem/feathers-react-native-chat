@@ -1,4 +1,4 @@
-import {AsyncStorage, NetInfo, AppState} from 'react-native';
+import {Alert, AsyncStorage, NetInfo, AppState} from 'react-native';
 import {observable, action, computed} from 'mobx';
 import {time, autobind} from 'core-decorators';
 import io from 'socket.io-client';
@@ -96,7 +96,7 @@ export default class Store {
       this.deleteMessage(result);
     });
 
-    if(this.app.get('accessToken')) {
+    if (this.app.get('accessToken')) {
       this.setIsAuthenticated(this.app.get('accessToken'));
     }
   }
@@ -131,13 +131,25 @@ export default class Store {
     options = options ? options : undefined;
     return this._authenticate(options).then(user => {
       console.log('authenticated successfully', user._id, user.email);
-        this.setUser(user);
+      this.setUser(user);
       return Promise.resolve(user);
-      }).catch(error => {
+    }).catch(error => {
       console.log('authenticated failed', error.message);
       console.log(error);
       return Promise.reject(error);
-      });
+    });
+  }
+
+  promptForLogout() {
+    Alert.alert('Sign Out', 'Are you sure you want to sign out?',
+      [
+        {
+          text: 'Cancel', onPress: () => {
+        }, style: 'cancel'
+        },
+        {text: 'Yes', onPress: this.logout, style: 'destructive'},
+      ]
+    );
   }
 
   @action
@@ -159,7 +171,7 @@ export default class Store {
 
     const query = {query: {$sort: {createdAt: -1}, $skip}};
 
-    if(!loadNextPage) {
+    if (!loadNextPage) {
       // this.setIsLoadingMessages(true);
     }
     return this.app.service('messages').find(query).then(response => {
@@ -171,8 +183,8 @@ export default class Store {
       }
 
       console.log('loaded messages from server', JSON.stringify(messages, null, 2));
-      if(!loadNextPage) {
-      this.setMessages(messages);
+      if (!loadNextPage) {
+        this.setMessages(messages);
       } else {
         this.addMessages(messages)
       }
