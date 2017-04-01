@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
-import {
-  View
-} from 'react-native';
+import {View} from 'react-native';
 import {autobind} from 'core-decorators';
 import {action, observable} from 'mobx';
 import {observer} from 'mobx-react/native';

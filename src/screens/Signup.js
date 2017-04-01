@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {
   Alert,
-  BackAndroid,
   Keyboard,
   TextInput,
   View,
@@ -38,8 +37,7 @@ export default class Signup extends React.Component {
   }
 
   componentDidMount() {
-    //TODO: Back button on Android
-    //BackAndroid.addEventListener('hardwareBackPress', () => Actions.pop());
+
   }
 
   onChangeEmail(text) {

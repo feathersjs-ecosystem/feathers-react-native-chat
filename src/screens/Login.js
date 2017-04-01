@@ -3,7 +3,6 @@
 import React, {Component} from 'react';
 import {
   Alert,
-  BackAndroid,
   Keyboard,
   Text,
   TextInput,
@@ -42,8 +41,7 @@ export default class Login extends Component {
   }
 
   componentDidMount() {
-    //TODO: Get back button working on Android
-    //BackAndroid.addEventListener('hardwareBackPress', () => Actions.pop());
+
   }
 
   login() {
