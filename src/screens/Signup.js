@@ -7,14 +7,15 @@ import {
   TouchableWithoutFeedback
 } from 'react-native';
 
-
-import {Button} from 'react-native-elements';
 import {autobind} from 'core-decorators';
-import NavIcons from '../NavIcons';
+import {observable} from 'mobx';
+import {observer} from 'mobx-react/native';
+import {Button} from 'react-native-elements';
+import NavIcons from '../components/NavIcons';
 const baseStyles = require('../baseStyles');
 import Utils from '../Utils';
 
-@autobind
+@autobind @observer
 export default class Signup extends React.Component {
   static navigationOptions = {
     title: 'Create Account',
@@ -25,40 +26,34 @@ export default class Signup extends React.Component {
     }
   };
 
+  @observable email = '';
+  @observable password = '';
+  @observable loading = false;
+
   constructor(props) {
     super(props);
     this.store = this.props.screenProps.store;
-
-    this.state = {
-      email: '',
-      password: '',
-      loading: false
-    }
   }
-
-  componentDidMount() {
-
-  }
-
+  
   onChangeEmail(text) {
-    this.setState({email: text});
+    this.email = text;
   }
 
   onChangePassword(text) {
-    this.setState({password: text});
+    this.password = text;
   }
 
   register() {
-    if (!Utils.validateEmail(this.state.email) || !Utils.validatePassword(this.state.password)) {
+    if (!Utils.validateEmail(this.email) || !Utils.validatePassword(this.password)) {
       Alert.alert('Please enter a valid email or password.');
       return;
     }
 
-    this.setState({loading: true});
-    this.store.createAccount(this.state.email, this.state.password).catch(error => {
+    this.loading = true;
+    this.store.createAccount(this.email, this.password).catch(error => {
       console.log(error);
       Alert.alert('Error', 'Please enter a valid email or password.');
-      this.setState({loading: false});
+      this.loading = false;
     });
   }
 
@@ -78,7 +73,7 @@ export default class Signup extends React.Component {
                 autoCapitalize='none'
                 keyBoardType='email-address'
                 returnKeyType='next'
-                value={this.state.email}
+                value={this.email}
                 onChangeText={this.onChangeEmail}
               />
             </View>
@@ -91,7 +86,7 @@ export default class Signup extends React.Component {
                 autoCorrect={false}
                 autoCapitalize='none'
                 returnKeyType='send'
-                value={this.state.password}
+                value={this.password}
                 onChangeText={this.onChangePassword}
               />
             </View>

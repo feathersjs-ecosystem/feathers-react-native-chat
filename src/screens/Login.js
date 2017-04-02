@@ -11,13 +11,15 @@ import {
 } from 'react-native';
 
 import {autobind} from 'core-decorators';
+import {observable} from 'mobx';
+import {observer} from 'mobx-react/native';
 import {Button} from 'react-native-elements';
-import NavIcons from '../NavIcons';
+import NavIcons from '../components/NavIcons';
 import Utils from '../Utils';
 
 const baseStyles = require('../baseStyles');
 
-@autobind
+@autobind @observer
 export default class Login extends Component {
   static navigationOptions = {
     title: 'Sign In',
@@ -28,47 +30,40 @@ export default class Login extends Component {
     }
   };
 
+  @observable email = '';
+  @observable password = '';
+  @observable loading = false;
+
   constructor(props) {
     super(props);
-
     this.store = this.props.screenProps.store;
-
-    this.state = {
-      email: 'cory.m.smith@gmail.com',
-      password: '1234',
-      loading: false
-    }
   }
 
-  componentDidMount() {
+  onChangeEmail(text) {
+    this.email = text;
+  }
 
+  onChangePassword(text) {
+    this.password = text;
   }
 
   login() {
-    if (!Utils.validateEmail(this.state.email) || !Utils.validatePassword(this.state.password)) {
+    if (!Utils.validateEmail(this.email) || !Utils.validatePassword(this.password)) {
       Alert.alert('Error', 'Please enter a valid email or password.');
       return;
     }
 
-    this.setState({loading: true});
-    this.store.login(this.state.email, this.state.password).catch(error => {
-      this.setState({loading: false});
+    this.loading = true;
+    this.store.login(this.email, this.password).catch(error => {
+      this.loading = false;
       console.log('LOGIN', 'ERROR', JSON.stringify(error), error.message);
       Alert.alert('Error', 'Login failed, please check your login/password.');
     });
   }
 
-  onChangeEmail(text) {
-    this.setState({email: text});
-  }
-
-  onChangePassword(text) {
-    this.setState({password: text});
-  }
-
   render() {
 
-    if (this.state.loading) {
+    if (this.loading) {
       return (
         <View style={{alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'white'}}>
           <Text style={{fontSize: 16}}>Signing in...</Text>
@@ -95,7 +90,7 @@ export default class Login extends Component {
                 placeholder='Email'
                 keyBoardType='email-address'
                 returnKeyType='next'
-                value={this.state.email}
+                value={this.email}
                 onChangeText={this.onChangeEmail}
               />
             </View>
@@ -105,7 +100,7 @@ export default class Login extends Component {
                 secureTextEntry={true}
                 placeholder='Password'
                 returnKeyType='send'
-                value={this.state.password}
+                value={this.password}
                 onChangeText={this.onChangePassword}
               />
             </View>

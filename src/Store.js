@@ -1,6 +1,6 @@
 import {Alert, AsyncStorage, NetInfo, AppState} from 'react-native';
 import {observable, action, computed} from 'mobx';
-import {time, autobind} from 'core-decorators';
+import {autobind} from 'core-decorators';
 import io from 'socket.io-client';
 import feathers from 'feathers/client'
 import hooks from 'feathers-hooks';
@@ -20,46 +20,6 @@ export default class Store {
   @observable hasMoreMessages = false;
   @observable skip = 0;
 
-  @action setIsAuthenticated(isAuthenticated) {
-    this.isAuthenticated = isAuthenticated;
-  }
-
-  @time
-  @action setUser(user) {
-    this.isAuthenticated = true;
-    console.log(JSON.stringify(user, null, 2));
-    this.user = user;
-  }
-
-  @action setConnected(connected) {
-    this.connected = connected;
-  }
-
-  @action setIsConnecting(isConnecting) {
-    this.isConnecting = isConnecting;
-  }
-
-  @action setMessages(messages) {
-    this.messages = messages;
-    this.isLoadingMessages = false;
-  }
-
-  @action addMessage(message) {
-    this.messages.unshift(message);
-  }
-
-  @action setHasMoreMessages(hasMoreMessages) {
-    this.hasMoreMessages = hasMoreMessages;
-  }
-
-  @action setIsLoadingMessages(isLoadingMessages) {
-    this.isLoadingMessages = isLoadingMessages;
-  }
-
-  @action setSkip(skip) {
-    this.skip = skip;
-  }
-
   constructor() {
     const options = {transports: ['websocket'], forceNew: true, pingTimeout: 3000, pingInterval: 5000};
     const socket = io(API_URL, options);
@@ -71,11 +31,29 @@ export default class Store {
       .configure(authentication({
         storage: AsyncStorage
       }));
-    this.setIsConnecting(true);
+
+    this.connect();
+
+    this.app.service('messages').on('created', createdMessage => {
+      this.messages.unshift(this.formatMessage(createdMessage));
+    });
+
+    this.app.service('messages').on('removed', removedMessage => {
+      this.deleteMessage(removedMessage);
+    });
+
+    if (this.app.get('accessToken')) {
+      this.isAuthenticated = this.app.get('accessToken') !== null;
+    }
+  }
+
+  connect() {
+    this.isConnecting = true;
 
     this.app.io.on('connect', () => {
-      this.setIsConnecting(false);
-      this.setConnected(true);
+      this.isConnecting = false;
+      this.connected = true;
+
       this.authenticate().then(() => {
         console.log('authenticated after reconnection');
       }).catch(error => {
@@ -85,21 +63,9 @@ export default class Store {
 
     this.app.io.on('disconnect', () => {
       console.log('disconnected');
-      this.setConnected(false);
-      this.setIsConnecting(true);
+      this.connected = false;
+      this.isConnecting = true;
     });
-
-    this.app.service('messages').on('created', message => {
-      this.addMessage(this.formatMessage(message));
-    });
-
-    this.app.service('messages').on('removed', result => {
-      this.deleteMessage(result);
-    });
-
-    if (this.app.get('accessToken')) {
-      this.setIsAuthenticated(this.app.get('accessToken'));
-    }
   }
 
   createAccount(email, password) {
@@ -107,16 +73,6 @@ export default class Store {
     return this.app.service('users').create(userData).then((result) => {
       return this.authenticate(Object.assign(userData, {strategy: 'local'}))
     });
-  }
-
-  _authenticate(payload) {
-    return this.app.authenticate(payload)
-      .then(response => {
-        return this.app.passport.verifyJWT(response.accessToken);
-      })
-      .then(payload => {
-        return this.app.service('users').get(payload.userId);
-      }).catch(e => Promise.reject(e));
   }
 
   login(email, password) {
@@ -132,13 +88,24 @@ export default class Store {
     options = options ? options : undefined;
     return this._authenticate(options).then(user => {
       console.log('authenticated successfully', user._id, user.email);
-      this.setUser(user);
+      this.user = user;
+      this.isAuthenticated = true;
       return Promise.resolve(user);
     }).catch(error => {
       console.log('authenticated failed', error.message);
       console.log(error);
       return Promise.reject(error);
     });
+  }
+
+  _authenticate(payload) {
+    return this.app.authenticate(payload)
+      .then(response => {
+        return this.app.passport.verifyJWT(response.accessToken);
+      })
+      .then(payload => {
+        return this.app.service('users').get(payload.userId);
+      }).catch(e => Promise.reject(e));
   }
 
   promptForLogout() {
@@ -153,7 +120,6 @@ export default class Store {
     );
   }
 
-  @action
   logout() {
     this.app.logout();
     this.skip = 0;
@@ -162,11 +128,6 @@ export default class Store {
     this.isAuthenticated = false;
   }
 
-  @action addMessages(messages) {
-    this.messages = this.messages.concat(messages);
-  }
-
-  @time @action
   loadMessages(loadNextPage) {
     let $skip = this.skip;
 
@@ -185,21 +146,20 @@ export default class Store {
 
       console.log('loaded messages from server', JSON.stringify(messages, null, 2));
       if (!loadNextPage) {
-        this.setMessages(messages);
+        this.messages = messages;
       } else {
-        this.addMessages(messages)
+        this.messages = this.messages.concat(messages);
       }
-      this.setSkip(skip);
-      this.setHasMoreMessages(response.skip + response.limit < response.total);
-      this.setIsLoadingMessages(false);
+      this.skip = skip;
+      this.hasMoreMessages = response.skip + response.limit < response.total;
+      this.isLoadingMessages = false;
 
     }).catch(error => {
       console.log(error);
-      this.setIsLoadingMessages(false);
+      this.isLoadingMessages = false;
     });
   }
 
-  @time
   formatMessage(message) {
     return {
       _id: message._id,
@@ -214,7 +174,6 @@ export default class Store {
     };
   }
 
-  @action @time
   deleteMessage(messageToRemove) {
     let messages = this.messages;
     let idToRemove = messageToRemove.id ? messageToRemove.id : messageToRemove._id;
@@ -225,7 +184,6 @@ export default class Store {
     this.messages = messages;
   }
 
-  @time
   sendMessage(messages = {}, rowID = null) {
     this.app.service('messages').create({text: messages[0].text}).then(result => {
       console.log('message created!');

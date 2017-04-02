@@ -8,11 +8,11 @@ import {
   Platform
 } from 'react-native';
 
-import {time, autobind} from 'core-decorators';
+import {autobind} from 'core-decorators';
 import {action, observable} from 'mobx';
 import {observer} from 'mobx-react/native';
 import {GiftedChat} from 'react-native-gifted-chat';
-import NavIcons from '../NavIcons';
+import NavIcons from '../components/NavIcons';
 
 const maxHeight = Platform.OS === 'ios' ? Dimensions.get('window').height - 65 : Dimensions.get('window').height - 85;
 
@@ -34,7 +34,6 @@ export default class Chat extends Component {
     this.props.screenProps.store.loadMessages();
   }
 
-  @time
   render() {
     return (
       <View style={styles.container}>

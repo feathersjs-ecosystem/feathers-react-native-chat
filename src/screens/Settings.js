@@ -10,7 +10,7 @@ import {
 import {autobind} from 'core-decorators';
 import {observer} from 'mobx-react/native';
 import {Button} from 'react-native-elements';
-import NavIcons from '../NavIcons';
+import NavIcons from '../components/NavIcons';
 
 const baseStyles = require('../baseStyles');
 
