@@ -1,4 +1,4 @@
-import {Alert, AsyncStorage, NetInfo, AppState} from 'react-native';
+import {Alert, AsyncStorage} from 'react-native';
 import {observable, action, computed} from 'mobx';
 import {autobind} from 'core-decorators';
 import io from 'socket.io-client';
@@ -16,7 +16,6 @@ export default class Store {
   @observable isConnecting = false;
   @observable user = null;
   @observable messages = [];
-  @observable isLoadingMessages = false;
   @observable hasMoreMessages = false;
   @observable skip = 0;
 
@@ -27,9 +26,8 @@ export default class Store {
     this.app = feathers()
       .configure(socketio(socket))
       .configure(hooks())
-      // Use AsyncStorage to store our login toke
       .configure(authentication({
-        storage: AsyncStorage
+        storage: AsyncStorage // To store our accessToken
       }));
 
     this.connect();
@@ -52,7 +50,6 @@ export default class Store {
 
     this.app.io.on('connect', () => {
       this.isConnecting = false;
-      this.connected = true;
 
       this.authenticate().then(() => {
         console.log('authenticated after reconnection');
@@ -63,7 +60,6 @@ export default class Store {
 
     this.app.io.on('disconnect', () => {
       console.log('disconnected');
-      this.connected = false;
       this.isConnecting = true;
     });
   }
@@ -133,9 +129,6 @@ export default class Store {
 
     const query = {query: {$sort: {createdAt: -1}, $skip}};
 
-    if (!loadNextPage) {
-      // this.setIsLoadingMessages(true);
-    }
     return this.app.service('messages').find(query).then(response => {
       const messages = [];
       const skip = response.skip + response.limit;
@@ -152,11 +145,9 @@ export default class Store {
       }
       this.skip = skip;
       this.hasMoreMessages = response.skip + response.limit < response.total;
-      this.isLoadingMessages = false;
 
     }).catch(error => {
       console.log(error);
-      this.isLoadingMessages = false;
     });
   }
 
