@@ -51,7 +51,8 @@ export default class Chat extends Component {
         {this.props.screenProps.store.isConnecting && <View style={styles.banner}>
           <Text style={styles.bannerText}>Reconnecting ...</Text>
         </View>}
-      </View>);
+      </View>
+    );
   }
 }
 
