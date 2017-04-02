@@ -21,7 +21,7 @@ export default class Store {
   @observable skip = 0;
 
   constructor() {
-    const options = {transports: ['websocket'], forceNew: true, pingTimeout: 3000, pingInterval: 5000};
+    const options = {transports: ['websocket'], pingTimeout: 3000, pingInterval: 5000};
     const socket = io(API_URL, options);
 
     this.app = feathers()
@@ -136,6 +136,7 @@ export default class Store {
     if (!loadNextPage) {
       // this.setIsLoadingMessages(true);
     }
+    
     return this.app.service('messages').find(query).then(response => {
       const messages = [];
       const skip = response.skip + response.limit;

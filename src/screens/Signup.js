@@ -63,7 +63,6 @@ export default class Signup extends React.Component {
         <View style={baseStyles.container}>
           <View style={baseStyles.inputs}>
             <View style={baseStyles.inputContainer}>
-
               <TextInput
                 style={[baseStyles.input, baseStyles.darkFont]}
                 autoFocus={true}

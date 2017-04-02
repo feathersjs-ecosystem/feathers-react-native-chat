@@ -28,10 +28,12 @@ export default class Application extends Component {
   }
 
   render() {
-    return (<View style={{flex: 1}}>
-      {this.store.isAuthenticated ? <MainNavigator screenProps={{store: this.store}}/> :
-        <UnauthenticatedNavigator screenProps={{store: this.store}}/>}
-    </View>)
+    return (
+      <View style={{flex: 1}}>
+        {this.store.isAuthenticated ? <MainNavigator screenProps={{store: this.store}}/> :
+          <UnauthenticatedNavigator screenProps={{store: this.store}}/>}
+      </View>
+    );
   }
 
 }
