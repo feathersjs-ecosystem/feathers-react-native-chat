@@ -14,9 +14,18 @@ A React Native example chat app using Feathers that talks with the [feathers-cha
     ```
 
 4. Install your dependencies
-    
+   
     ```
-    cd path/to/feathers-react-native-chat; npm install
+    cd path/to/feathers-react-native-chat;
+    ```
+    
+    ##### npm
+    ```
+    npm install
+    ```
+    ##### yarn
+    ```
+    yarn install
     ```
 
 5. Start the [feathers-chat](https://github.com/feathersjs/feathers-chat) server.
