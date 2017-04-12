@@ -1,4 +1,6 @@
 # feathers-react-native-chat
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/feathers-react-native-chat.svg)](https://greenkeeper.io/)
 A React Native example chat app using Feathers that talks with the [feathers-chat](https://github.com/feathersjs/feathers-chat) server.
 
 ## Getting Started
