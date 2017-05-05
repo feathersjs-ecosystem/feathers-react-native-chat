@@ -21,14 +21,11 @@ const baseStyles = require('../baseStyles');
 
 @autobind @observer
 export default class Login extends Component {
-  static navigationOptions = {
+
+  static navigationOptions = ({navigation}) => ({
     title: 'Sign In',
-    header: ({goBack}) => {
-      return {
-        left: NavIcons.closeButton(goBack)
-      };
-    }
-  };
+    headerLeft: NavIcons.closeButton(navigation.goBack)
+  });
 
   @observable email = '';
   @observable password = '';
