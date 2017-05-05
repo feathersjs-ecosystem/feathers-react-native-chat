@@ -17,14 +17,10 @@ import Utils from '../Utils';
 
 @autobind @observer
 export default class Signup extends React.Component {
-  static navigationOptions = {
+  static navigationOptions = ({navigation}) => ({
     title: 'Create Account',
-    header: ({goBack}) => {
-      return {
-        left: NavIcons.closeButton(goBack)
-      };
-    }
-  };
+    headerLeft: NavIcons.closeButton(navigation.goBack)
+  });
 
   @observable email = '';
   @observable password = '';

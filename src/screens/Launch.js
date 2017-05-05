@@ -12,9 +12,7 @@ import {autobind} from 'core-decorators';
 @autobind
 export default class Launch extends Component {
   static navigationOptions = {
-    header: {
-      visible: false,
-    }
+    header: null
   };
 
   _showLogin() {

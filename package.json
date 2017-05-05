@@ -19,7 +19,7 @@
 		"react-native-elements": "^0.10.2",
 		"react-native-gifted-chat": "0.1.3",
 		"react-native-vector-icons": "^4.0.0",
-		"react-navigation": "^1.0.0-beta.7",
+		"react-navigation": "1.0.0-beta.9",
 		"socket.io-client": "^1.7.3"
 	},
 	"devDependencies": {

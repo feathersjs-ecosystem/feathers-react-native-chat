@@ -18,17 +18,11 @@ const maxHeight = Platform.OS === 'ios' ? Dimensions.get('window').height - 65 :
 
 @observer @autobind
 export default class Chat extends Component {
-  static navigationOptions = {
+  static navigationOptions = ({navigation}) => ({
     title: '#feathersjs',
-    cardStack: {
-      gesturesEnabled: false
-    },
-    header: ({navigate}) => {
-      return {
-        right: NavIcons.settingsButton(navigate)
-      };
-    },
-  };
+    headerRight: NavIcons.settingsButton(navigation.navigate),
+    gesturesEnabled: false
+  });
 
   componentDidMount() {
     this.props.screenProps.store.loadMessages();

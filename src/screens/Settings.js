@@ -18,14 +18,10 @@ import { NavigationActions } from 'react-navigation'
 
 @autobind @observer
 export default class Settings extends Component {
-  static navigationOptions = {
+  static navigationOptions = ({navigation}) => ({
     title: 'Settings',
-    header: ({goBack}) => {
-      return {
-        left : NavIcons.closeButton(goBack)
-      }
-    }
-  };
+    headerLeft: NavIcons.closeButton(navigation.goBack)
+  });
 
   render() {
     const user = this.props.screenProps.store.user;
