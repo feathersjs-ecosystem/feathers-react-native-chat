@@ -31,7 +31,7 @@
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
                BuildableName = "FeathersReactNativeChat.app"
                BlueprintName = "FeathersReactNativeChat"
-               ReferencedContainer = "container:FeathersReactNativeChat.xcodeproj">
+               ReferencedContainer = "container:feathersreactnativechat.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -45,7 +45,7 @@
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
                BuildableName = "FeathersReactNativeChatTests.xctest"
                BlueprintName = "FeathersReactNativeChatTests"
-               ReferencedContainer = "container:FeathersReactNativeChat.xcodeproj">
+               ReferencedContainer = "container:feathersreactnativechat.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -63,7 +63,7 @@
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
                BuildableName = "FeathersReactNativeChatTests.xctest"
                BlueprintName = "FeathersReactNativeChatTests"
-               ReferencedContainer = "container:FeathersReactNativeChat.xcodeproj">
+               ReferencedContainer = "container:feathersreactnativechat.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -73,7 +73,7 @@
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "FeathersReactNativeChat.app"
             BlueprintName = "FeathersReactNativeChat"
-            ReferencedContainer = "container:FeathersReactNativeChat.xcodeproj">
+            ReferencedContainer = "container:feathersreactnativechat.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -96,7 +96,7 @@
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "FeathersReactNativeChat.app"
             BlueprintName = "FeathersReactNativeChat"
-            ReferencedContainer = "container:FeathersReactNativeChat.xcodeproj">
+            ReferencedContainer = "container:feathersreactnativechat.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -115,7 +115,7 @@
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "FeathersReactNativeChat.app"
             BlueprintName = "FeathersReactNativeChat"
-            ReferencedContainer = "container:FeathersReactNativeChat.xcodeproj">
+            ReferencedContainer = "container:feathersreactnativechat.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
