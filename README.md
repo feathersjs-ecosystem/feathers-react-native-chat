@@ -1,4 +1,7 @@
+> __Note:__ All chat frontend examples have been moved to https://github.com/feathersjs/feathers-chat/
+
 # feathers-react-native-chat
+
 A React Native example chat app using Feathers that talks with the [feathers-chat](https://github.com/feathersjs/feathers-chat) server.
 
 ## Getting Started
